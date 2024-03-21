@@ -23,7 +23,10 @@ class _AddCropsPageState extends State<AddCropsPage> {
         return ['Carrot', 'Beetroot'];
       case 'Fruits':
         return ['Mango', 'Ranbuttan'];
-    // Add more cases for other crop types if needed
+      case 'Yams':
+        return ['Ratala', 'Kiri ala'];
+      case 'Pulses and ceriels':
+        return ['Green Gram (Mung Beans)', 'Cowpeas'];
       default:
         return [];
     }
