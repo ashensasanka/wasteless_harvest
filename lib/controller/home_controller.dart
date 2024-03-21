@@ -60,6 +60,8 @@ class HomeController extends GetxController{
   DateTime? logday;
   String? lat,long;
   String croptype = 'Type';
+  String cropcatg = 'Category';
+  List<String> cropcatgItems = [];
   String addlistingtype = 'Type';
   String brand = 'Fish Category';
   String from = 'To';
@@ -151,7 +153,7 @@ class HomeController extends GetxController{
       DocumentReference doc = cropCollection.doc(); //farmer
       Crops crops = Crops(
         id:doc.id,
-        name:productNameCtrl.text,
+        name:cropcatg,
         type: croptype,
         description: productDescriptionCtrl.text,
         price: double.tryParse(productPriceCtrl.text),

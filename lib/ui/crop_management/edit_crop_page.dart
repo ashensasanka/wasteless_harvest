@@ -344,7 +344,7 @@ class _EditCropPageState extends State<EditCropPage> {
                         selectedItemText: dropdownValue,
                         onSelected: (selectedValue) {
                           dropdownValue = selectedValue ?? '';
-                          multipliedValue = int.parse(dropdownValue) * 5;
+                          multipliedValue = int.parse(dropdownValue) * 9;
                           ctrl.update();
                         },
                       ),

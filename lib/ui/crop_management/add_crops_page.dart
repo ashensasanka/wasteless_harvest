@@ -14,6 +14,20 @@ class AddCropsPage extends StatefulWidget {
 }
 
 class _AddCropsPageState extends State<AddCropsPage> {
+
+  List<String> getCategoriesForCropType(String cropType) {
+    switch (cropType) {
+      case 'Paddy':
+        return ['Nadu rice', 'Red rice'];
+      case 'Vegetables':
+        return ['Carrot', 'Beetroot'];
+      case 'Fruits':
+        return ['Mango', 'Ranbuttan'];
+    // Add more cases for other crop types if needed
+      default:
+        return [];
+    }
+  }
   @override
   Widget build(BuildContext context) =>
     GetBuilder<HomeController>(builder:(ctrl) {
@@ -44,18 +58,35 @@ class _AddCropsPageState extends State<AddCropsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 15),
-                  TextField(
-                    controller: ctrl.productNameCtrl,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.black), // Change border color here
-                      ),
-                      labelText: 'Crop Name', // Changed 'label' to 'labelText' for the newer version of Flutter
-                      hintText: 'Enter Crop Name',
-                      labelStyle: TextStyle(fontWeight: FontWeight.bold), // Make label bold
+                  Container(
+                    width: 200, // Set width as per your requirement
+                    color: Colors.green, // Set the desired background color here
+                    child: DropDownBtn(
+                      items: const ['Paddy', 'Vegetables', 'Fruits', 'Yams', 'Pulses and ceriels'],
+                      selectedItemText: ctrl.croptype,
+                      onSelected: (selectedValue) {
+                        setState(() {
+                          ctrl.croptype = selectedValue ?? 'Type';
+                          ctrl.cropcatgItems  = getCategoriesForCropType(selectedValue ?? '');
+                        });
+                        ctrl.update();
+                      },
                     ),
                   ),
+                  const SizedBox(height: 15),
+                  Container(
+                    width: 200, // Set width as per your requirement
+                    color: Colors.green, // Set the desired background color here
+                    child: DropDownBtn(
+                      items: ctrl.cropcatgItems,
+                      selectedItemText: ctrl.cropcatg,
+                      onSelected: (selectedValue) {
+                        ctrl.cropcatg = selectedValue ?? 'Category';
+                        ctrl.update();
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   const SizedBox(height: 15),
                   TextField(
                     controller: ctrl.productDescriptionCtrl,
@@ -91,20 +122,6 @@ class _AddCropsPageState extends State<AddCropsPage> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Container(
-                    width: 200, // Set width as per your requirement
-                    color: Colors.green, // Set the desired background color here
-                    child: DropDownBtn(
-                      items: const ['Type1', 'Type2', 'Type3', 'Type4'],
-                      selectedItemText: ctrl.croptype,
-                      onSelected: (selectedValue) {
-                        ctrl.croptype = selectedValue ?? 'Type';
-                        ctrl.update();
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
                   TextField(
                     controller: ctrl.cropPlantCtrl,
                     decoration: InputDecoration(
@@ -113,17 +130,6 @@ class _AddCropsPageState extends State<AddCropsPage> {
                         ),
                         label: const Text('Plant Date'),
                         hintText: 'Enter Plant Date (DD/MM/YYYY)'
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  TextField(
-                    controller: ctrl.cropHarvestCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        label: const Text('Harvest Date'),
-                        hintText: 'Enter Harvest Date (DD/MM/YYYY)'
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -138,7 +144,7 @@ class _AddCropsPageState extends State<AddCropsPage> {
                     },
                     child: const Text('Add Crop'),
                   ),
-                  SizedBox(height: 30,)
+                  SizedBox(height: 115,)
                 ],
               ),
             ),
