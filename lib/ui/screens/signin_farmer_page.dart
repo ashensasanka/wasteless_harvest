@@ -131,7 +131,7 @@ class _SignInFarmerState extends State<SignInFarmer> {
                         Navigator.pushReplacement(
                           context,
                           PageTransition(
-                            child: const FarmerRootPage(),
+                            child: FarmerRootPage(username:username),
                             type: PageTransitionType.bottomToTop,
                           ),
                         );

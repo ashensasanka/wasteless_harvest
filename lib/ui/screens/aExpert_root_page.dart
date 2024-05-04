@@ -19,7 +19,8 @@ import 'aexpert_profile_page.dart';
 
 
 class AexpertRootPage extends StatefulWidget {
-  const AexpertRootPage({Key? key}) : super(key: key);
+  final String username;
+  const AexpertRootPage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<AexpertRootPage> createState() => _RootPageState();
@@ -32,8 +33,8 @@ class _RootPageState extends State<AexpertRootPage> {
   //List of the pages
   List<Widget> _widgetOptions(){
     return [
-      const AexpertHomePage(),
-      const AexpertProfilePage(),
+      AexpertHomePage(username: widget.username,),
+      AexpertProfilePage(username: widget.username,),
     ];
   }
 

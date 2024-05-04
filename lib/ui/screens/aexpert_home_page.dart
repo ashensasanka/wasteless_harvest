@@ -13,8 +13,9 @@ import 'package:provider/provider.dart';
 import '../../models/enrollers.dart';
 import '../../models/home_details.dart';
 import '../../provider/auth_provider.dart';
+import '../home_screen/Eeducational_resources_page.dart';
 import '../home_screen/crop_management_page.dart';
-import '../home_screen/educational_resources_page.dart';
+import '../home_screen/Feducational_resources_page.dart';
 import '../home_screen/market_place_buyer_page.dart';
 import '../home_screen/market_place_farmer_page.dart';
 import '../home_screen/rate_comment_farmer_page.dart';
@@ -22,7 +23,8 @@ import '../home_screen/farmer_report_page.dart';
 import 'onboarding_screen.dart';
 
 class AexpertHomePage extends StatefulWidget {
-  const AexpertHomePage({Key? key}) : super(key: key);
+  final String username;
+  const AexpertHomePage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<AexpertHomePage> createState() => _HomePageState();
@@ -52,7 +54,7 @@ class _HomePageState extends State<AexpertHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EducatResoPage(),
+                          builder: (context) => EEducatResoPage(username: widget.username,),
                         ),
                       );
                     },

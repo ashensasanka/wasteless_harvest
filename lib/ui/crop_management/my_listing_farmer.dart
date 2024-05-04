@@ -6,7 +6,8 @@ import 'listing_card.dart';
 import 'my_card.dart';
 
 class MyListingPage extends StatefulWidget {
-  const MyListingPage({super.key});
+  final String username;
+  const MyListingPage({super.key, required this.username});
 
   @override
   State<MyListingPage> createState() => _MyListingPageState();
@@ -18,7 +19,7 @@ class _MyListingPageState extends State<MyListingPage> {
       GetBuilder<HomeController>(builder:(ctrl) {
         return RefreshIndicator(
           onRefresh: () async{
-            ctrl.fetchfarmerListingDetails();
+            ctrl.fetchfarmerListingDetails(widget.username);
           },
           child: Scaffold(
             appBar: AppBar(

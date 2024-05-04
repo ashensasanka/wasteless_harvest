@@ -11,23 +11,19 @@ class MyCard extends StatefulWidget {
   final String type;
   final String name;
   final String imageUrl;
-  final double price;
   final Function onTap;
   final String plant_date;
   final String harvest_date;
-  final String description;
 
   const MyCard(
       {super.key,
         required this.name,
         required this.imageUrl,
-        required this.price,
         required this.onTap,
         required this.index,
         required this.type,
         required this.plant_date,
-        required this.harvest_date,
-        required this.description});
+        required this.harvest_date});
 
   @override
   State<MyCard> createState() => _MyCardState();
@@ -153,7 +149,6 @@ class _MyCardState extends State<MyCard> {
                                       MaterialPageRoute(
                                         builder: (context) =>  EditCropPage(
                                             index:widget.index,
-                                            description:widget.description,
                                             plant_date:widget.plant_date,
                                         harvest_date:widget.harvest_date),
                                       ),

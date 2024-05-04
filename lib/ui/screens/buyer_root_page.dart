@@ -15,10 +15,9 @@ import 'package:provider/provider.dart';
 import '../../provider/auth_provider.dart';
 import 'buyer_home_page.dart';
 
-
-
 class BuyerRootPage extends StatefulWidget {
-  const BuyerRootPage({Key? key}) : super(key: key);
+  final String username;
+  const BuyerRootPage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<BuyerRootPage> createState() => _RootPageState();
@@ -31,8 +30,8 @@ class _RootPageState extends State<BuyerRootPage> {
   //List of the pages
   List<Widget> _widgetOptions(){
     return [
-      const BuyerHomePage(),
-      const BuyerProfilePage(),
+      BuyerHomePage(username: widget.username,),
+      BuyerProfilePage(username: widget.username,),
     ];
   }
 
@@ -53,7 +52,7 @@ class _RootPageState extends State<BuyerRootPage> {
     final ap = Provider.of<AuthProvider1>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {
@@ -72,11 +71,14 @@ class _RootPageState extends State<BuyerRootPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(titleList[_bottomNavIndex], style: TextStyle(
-              color: Constants.blackColor,
-              fontWeight: FontWeight.w500,
-              fontSize: 24,
-            ),),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(100, 0, 0, 0),
+              child: Text(titleList[_bottomNavIndex], style: TextStyle(
+                color: Constants.blackColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 24,
+              ),),
+            ),
             Icon(Icons.notifications, color: Constants.blackColor, size: 30.0,)
           ],
         ),

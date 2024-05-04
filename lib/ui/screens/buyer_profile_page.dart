@@ -11,7 +11,8 @@ import '../../models/user_image_model.dart';
 import '../../provider/auth_provider.dart';
 import '../../utils/utils.dart';
 class BuyerProfilePage extends StatefulWidget {
-  const BuyerProfilePage({Key? key}) : super(key: key);
+  final String username;
+  const BuyerProfilePage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<BuyerProfilePage> createState() => _ProfilePageState();
@@ -205,6 +206,59 @@ class _ProfilePageState extends State<BuyerProfilePage> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(height: 15,),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Close the dialog and perform action
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Confirmation'),
+                              content: Text('Are you sure you want to deactivate the premium?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Close the dialog and perform action
+                                    Navigator.of(context).pop();
+                                    setState(() {
+                                      // Update premium field in Firestore
+                                      FirebaseFirestore.instance.collection('buyer_users').doc(widget.username).update({
+                                        'premium': false,
+                                      }).then((_) {
+                                        print('Premium activated successfully');
+                                        // Handle success or additional actions here
+                                      }).catchError((error) {
+                                        print('Error updating premium: $error');
+                                        // Handle error here
+                                      });
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.blue,
+                                  ),
+                                  child: Text('Yes'),
+                                ),
+
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.green,
+                      ),
+                      child: Text('Unsubscribe'),
                     ),
                     SizedBox(height: 20,),
                   ],

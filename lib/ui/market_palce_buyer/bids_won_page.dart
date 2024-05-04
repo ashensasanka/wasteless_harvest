@@ -17,7 +17,7 @@ class _BidsWonPageState extends State<BidsWonPage> {
     return GetBuilder<HomeController>(builder: (ctrl){
       return RefreshIndicator(
         onRefresh: () async{
-          ctrl.fetchListingDetails();
+          ctrl.fetchListingDetails('');
         },
         child: Scaffold(
           backgroundColor: Color(0xfff2f6df),
@@ -49,7 +49,6 @@ class _BidsWonPageState extends State<BidsWonPage> {
                           type:ctrl.listingsShowInUi[index].type ?? '',
                           name: ctrl.listingsShowInUi[index].name ?? 'No name',
                           imageUrl: ctrl.listingsShowInUi[index].image ?? 'url',
-                          price: ctrl.listingsShowInUi[index].price ?? 00,
                           offerTag: '',
                           onTap: () {
                             // Get.to(const ProductDescriptionPage(), arguments: {'data':ctrl.productShowInUi[index]});

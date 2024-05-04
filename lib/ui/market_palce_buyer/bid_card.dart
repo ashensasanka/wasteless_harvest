@@ -11,7 +11,6 @@ class BidCard extends StatefulWidget {
   final int index;
   final String name;
   final String imageUrl;
-  final double price;
   final String offerTag;
   final Function onTap;
   final String type;
@@ -20,7 +19,6 @@ class BidCard extends StatefulWidget {
       {super.key,
         required this.name,
         required this.imageUrl,
-        required this.price,
         required this.offerTag,
         required this.onTap, required this.index, required this.type});
 

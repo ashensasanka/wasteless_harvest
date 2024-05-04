@@ -66,6 +66,7 @@ class AuthProvider1 extends ChangeNotifier{
           },
           codeAutoRetrievalTimeout: (verificationId) {});
     } on FirebaseAuthException catch (e) {
+      print('ErrorErrorErrorErrorErrorError');
       showSnackBar(context, e.message.toString());
     }
   }

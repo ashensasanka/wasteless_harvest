@@ -10,7 +10,7 @@ import '../../../controller/home_controller.dart';
 import '../../../utils/utils.dart';
 import '../../widgets/drop_down_btn.dart';
 import '../../widgets/round_button.dart';
-import 'articles_page.dart';
+import 'Earticles_page.dart';
 import 'image_video_view.dart';
 
 class CreatePostScreen extends ConsumerStatefulWidget {
@@ -158,7 +158,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                           ctrl.addPost(file, fileType);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const ArticlesPage()),
+                            MaterialPageRoute(builder: (context) => const EArticlesPage()),
                           );
                     },
                     label: 'Post',

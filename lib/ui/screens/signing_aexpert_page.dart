@@ -131,7 +131,7 @@ class _SignInAExpertState extends State<SignInAExpert> {
                         Navigator.pushReplacement(
                           context,
                           PageTransition(
-                            child: const AexpertRootPage(),
+                            child: AexpertRootPage(username: username,),
                             type: PageTransitionType.bottomToTop,
                           ),
                         );
@@ -206,46 +206,6 @@ class _SignInAExpertState extends State<SignInAExpert> {
               ),
               const SizedBox(
                 height: 10,
-              ),
-              Row(
-                children: const [
-                  Expanded(child: Divider()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('OR'),
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageTransition(
-                          child: SignUpAExpert(),
-                          type: PageTransitionType.bottomToTop));
-                },
-                child: Center(
-                  child: Text.rich(
-                    TextSpan(children: [
-                      TextSpan(
-                        text: 'New to Planty? ',
-                        style: TextStyle(
-                          color: Constants.blackColor,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Register',
-                        style: TextStyle(
-                          color: Constants.primaryColor,
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
               ),
             ],
           ),

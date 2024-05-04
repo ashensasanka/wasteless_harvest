@@ -63,9 +63,9 @@ class _SignUpState extends State<SignUpFarmer> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: isLoading == true
             ? const Center(
-          child: CircularProgressIndicator(
-            color: Colors.purple,
-          ),
+              child: CircularProgressIndicator(
+                color: Colors.purple,
+              ),
         ):
         SingleChildScrollView(
           child: Column(
@@ -261,21 +261,6 @@ class _SignUpState extends State<SignUpFarmer> {
                   ):null,
                 ),
               ),
-              // const CustomTextfield(
-              //   obscureText: false,
-              //   hintText: 'Enter OTP',
-              //   icon: Icons.paste_sharp,
-              // ),
-              // const CustomTextfield(
-              //   obscureText: false,
-              //   hintText: 'Enter Email',
-              //   icon: Icons.alternate_email,
-              // ),
-              // const CustomTextfield(
-              //   obscureText: false,
-              //   hintText: 'Enter Address',
-              //   icon: Icons.home,
-              // ),
               const SizedBox(
                 height: 10,
               ),
@@ -416,7 +401,9 @@ class _SignUpState extends State<SignUpFarmer> {
       phoneNumber: farmerphoneController.text.trim(),
       uid: "Farmer",
       name: "",
-      age:  ""
+      age:  "",
+      premium:false,
+      imageURL: ""
     );
     if (farmerusernameController != null) {
       ap.saveFarmerUserDataToFirebase(

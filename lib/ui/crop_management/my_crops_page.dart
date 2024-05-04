@@ -7,7 +7,8 @@ import '../../controller/home_controller.dart';
 import 'my_card.dart';
 
 class MyCropsPage extends StatefulWidget {
-  const MyCropsPage({super.key});
+  final String username;
+  const MyCropsPage({super.key, required this.username});
 
   @override
   State<MyCropsPage> createState() => _MyCropsPageState();
@@ -19,7 +20,7 @@ class _MyCropsPageState extends State<MyCropsPage> {
       GetBuilder<HomeController>(builder:(ctrl) {
         return RefreshIndicator(
           onRefresh: () async{
-            ctrl.fetchListingDetails();
+            ctrl.fetchListingDetails(widget.username);
           },
           child: Scaffold(
             appBar: AppBar(
@@ -61,10 +62,8 @@ class _MyCropsPageState extends State<MyCropsPage> {
                                 type: ctrl.listingsShowInUi[index].type ?? 'Na category',
                                 name: ctrl.listingsShowInUi[index].name ?? 'No name',
                                 imageUrl: ctrl.listingsShowInUi[index].image ?? 'url',
-                                price: ctrl.listingsShowInUi[index].price ?? 00,
                                 plant_date:ctrl.listingsShowInUi[index].plant_date ?? '',
                                 harvest_date:ctrl.listingsShowInUi[index].harvest_date ?? '',
-                                description:ctrl.listingsShowInUi[index].description ?? '',
                                 onTap: () {
                                   // Get.to(const ProductDescriptionPage(), arguments: {'data':ctrl.productShowInUi[index]});
                                 },);

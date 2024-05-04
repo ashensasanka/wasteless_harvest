@@ -4,14 +4,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../constants/constants_articles.dart';
 import '../../../constants/round_icon_button.dart';
 
-class ArticlesPage extends StatefulWidget {
-  const ArticlesPage({super.key});
+class FArticlesPage extends StatefulWidget {
+  const FArticlesPage({super.key});
 
   @override
-  State<ArticlesPage> createState() => _ArticlesPageState();
+  State<FArticlesPage> createState() => _FArticlesPageState();
 }
 
-class _ArticlesPageState extends State<ArticlesPage> with TickerProviderStateMixin{
+class _FArticlesPageState extends State<FArticlesPage> with TickerProviderStateMixin{
   late final TabController _tabController;
   @override
   void initState() {
@@ -34,7 +34,6 @@ class _ArticlesPageState extends State<ArticlesPage> with TickerProviderStateMix
           actions: [
             // built the actions
             _buildSearchWidget(),
-            _buildMessengerWidget(),
           ],
           bottom: TabBar(
             tabs: Constants.getHomeScreenTabs(_tabController.index),
@@ -53,7 +52,7 @@ class _ArticlesPageState extends State<ArticlesPage> with TickerProviderStateMix
         ),
         body: TabBarView(
           controller: _tabController,
-          children: Constants.screens,
+          children: Constants.fscreens,
         ),
       ),
     );
@@ -71,14 +70,4 @@ class _ArticlesPageState extends State<ArticlesPage> with TickerProviderStateMix
   Widget _buildSearchWidget() => const RoundIconButton(
     icon: FontAwesomeIcons.magnifyingGlass,
   );
-
-  //Messenger Icon
-  Widget _buildMessengerWidget() =>
-      InkWell(
-          onTap: () {
-
-          },
-          child: const RoundIconButton(
-            icon: FontAwesomeIcons.facebookMessenger,)
-      );
 }

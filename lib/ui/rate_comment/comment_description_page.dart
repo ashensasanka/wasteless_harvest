@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmer/ui/rate_comment/comments_list.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -30,8 +31,10 @@ class _CommentDescriptionPageState extends State<CommentDescriptionPage> {
   }
   @override
   Widget build(BuildContext context) {
-    RateComment rateComment = Get.arguments['data'];
-    double rate = rateComment.rate as double;
+    final Map<String, dynamic> data = Get.arguments['data'].data() as Map<String, dynamic>;
+    // RateComment rateComment = Get.arguments['data'];
+    // double rate = rateComment.rate as double;
+    // double rate = data['rate'] as double;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rate and Comment Farmer', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -44,7 +47,7 @@ class _CommentDescriptionPageState extends State<CommentDescriptionPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                rateComment.image ?? '',
+                data['imageUrl'] ?? 'url',
                 fit: BoxFit.contain,
                 width: double.infinity,
                 height: 200,
@@ -65,7 +68,7 @@ class _CommentDescriptionPageState extends State<CommentDescriptionPage> {
                         ),
                       ),
                       TextSpan(
-                        text: rateComment.name ?? '',
+                        text: data['name'] ?? 'No name',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -77,7 +80,7 @@ class _CommentDescriptionPageState extends State<CommentDescriptionPage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(width: 55,),
-                Row(
+                Column(
                   children: [
                     Text(
                       'Farmer Rating: ',
@@ -87,11 +90,15 @@ class _CommentDescriptionPageState extends State<CommentDescriptionPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    for (int i = 0; i < 5; i++)
-                      Icon(
-                        Icons.star,
-                        color: i < rate ? Colors.yellow : Colors.grey.withOpacity(0.5),
-                        size: 20,
+                      Row(
+                        children: [
+                          for (int i = 0; i < 5; i++)
+                          Icon(
+                            Icons.star,
+                            color: i < data['rate'] ? Colors.yellow : Colors.grey.withOpacity(0.5),
+                            size: 20,
+                          ),
+                        ],
                       ),
                   ],
                 ),
@@ -159,26 +166,27 @@ class _CommentDescriptionPageState extends State<CommentDescriptionPage> {
                   children: [
                     Icon(Icons.radio_button_checked_outlined),
                     SizedBox(width: 20,),
-                    StreamBuilder<DocumentSnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection("farmer_users")
-                            .doc("Farmer1")
-                            .snapshots(),
-                        builder: (context, snapshot){
-                          if (snapshot.hasData){
-                            final userdata = snapshot.data!.data() as Map<String, dynamic>;
-
-                            return Text(userdata['username']);
-                          } else if (snapshot.hasError){
-                            return Center(
-                              child: Text('Error${snapshot.error}'),
-                            );
-                          }
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                    ),
+                    Text(data['username']),
+                    // StreamBuilder<DocumentSnapshot>(
+                    //     stream: FirebaseFirestore.instance
+                    //         .collection("farmer_users")
+                    //         .doc("Farmer1")
+                    //         .snapshots(),
+                    //     builder: (context, snapshot){
+                    //       if (snapshot.hasData){
+                    //         final userdata = snapshot.data!.data() as Map<String, dynamic>;
+                    //
+                    //         return ;
+                    //       } else if (snapshot.hasError){
+                    //         return Center(
+                    //           child: Text('Error${snapshot.error}'),
+                    //         );
+                    //       }
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(),
+                    //       );
+                    //     }
+                    // ),
                   ],
                 ),
                 SizedBox(width: 90,),

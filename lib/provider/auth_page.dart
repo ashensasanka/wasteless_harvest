@@ -4,6 +4,7 @@ import 'package:farmer/ui/screens/root_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../ui/screens/enroller_page.dart';
 import '../ui/screens/farmer_home_page.dart';
 import '../ui/screens/lets_start_page.dart';
 import '../ui/screens/onboarding_screen.dart';
@@ -32,7 +33,7 @@ class _AuthPageState extends State<AuthPage> {
                 builder: (context, documentSnapshot) {
                   if (documentSnapshot.hasData && documentSnapshot.data != null) {
                     String userRole = documentSnapshot.data!.get('uid');
-                    return userRole == 'Expert' ? const RootPage() : const RootPage();
+                    return userRole == 'Expert' ? const EnrollerPage():const RootPage();
                   } else {
                     return const CircularProgressIndicator(); // Handle loading state
                   }

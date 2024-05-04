@@ -424,7 +424,9 @@ class _SignUpState extends State<SignUpAExpert> {
       phoneNumber: expertphoneController.text.trim(),
       uid: "Expert",
       name: "",
-      age: ""
+      age: "",
+      premium:false,
+      imageURL: ""
     );
     if (expertusernameController != null) {
       ap.saveExpertUserDataToFirebase(

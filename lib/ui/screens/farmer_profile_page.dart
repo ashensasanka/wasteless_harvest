@@ -3,15 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:farmer/constants/constants.dart';
 import 'package:farmer/ui/widgets/profile_widget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 
 import '../../components/text_box.dart';
 import '../../models/user_image_model.dart';
 import '../../provider/auth_provider.dart';
+import '../../provider/firestore.dart';
 import '../../utils/utils.dart';
 class FarmerProfilePage extends StatefulWidget {
-  const FarmerProfilePage({Key? key}) : super(key: key);
+  final String username;
+  const FarmerProfilePage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<FarmerProfilePage> createState() => _ProfilePageState();
@@ -20,6 +23,7 @@ class FarmerProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<FarmerProfilePage> {
   // final currentUser = FirebaseAuth.instance.currentUser!;
   final userCollection = FirebaseFirestore.instance.collection("farmer_users");
+  final FireStoreService fireStoreService = FireStoreService();
 
   Future<void> editField(String field) async {
     String newValue = "";
@@ -55,7 +59,7 @@ class _ProfilePageState extends State<FarmerProfilePage> {
         ));
 
     if (newValue.trim().isNotEmpty){
-      await userCollection.doc("Farmer1").update({field: newValue});
+      await userCollection.doc(widget.username).update({field: newValue});
     }
   }
 
@@ -99,42 +103,33 @@ class _ProfilePageState extends State<FarmerProfilePage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 20,),
-                    Container(
-                      width: 400,
-                      child: InkWell(
+                    SizedBox(height: 20,width: 400,),
+                    InkWell(
                         onTap: () => selectImage(),
-                        child: image == null? Container(
-                          child: const CircleAvatar(
-                            radius: 60,
-                          ),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Constants.primaryColor.withOpacity(.5),
-                              width: 10.0,
-                            ),
-                          ),
-                        )
-                        :Container(
-                          child: CircleAvatar(
-                            radius: 60,
-                            backgroundImage: image != null ? FileImage(image!) : null,
-                          ),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Constants.primaryColor.withOpacity(.5),
-                              width: 5.0,
-                            ),
-                          ),
+                        child: StreamBuilder<DocumentSnapshot>(
+                          stream: userCollection.doc(widget.username).snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError) {
+                              return Center(child: Text('Error: ${snapshot.error}'));
+                            }
+                            final DocumentSnapshot document = snapshot.data!;
+                            final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                            return data['imageUrl'] == null? CircleAvatar(
+                              backgroundImage: AssetImage("assets/images/propic.png"),
+                            ):CircleAvatar(
+                              maxRadius: 80,
+                              backgroundImage: NetworkImage("${data['imageUrl']}"),
+                            );
+                          },
                         ),
                       ),
-                    ),
                     StreamBuilder<DocumentSnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection("farmer_users")
-                            .doc("Farmer1")
+                            .doc(widget.username)
                             .snapshots(),
                         builder: (context, snapshot){
                           if (snapshot.hasData){
@@ -144,7 +139,6 @@ class _ProfilePageState extends State<FarmerProfilePage> {
                                 width: 350,
                                 child: Column(
                                   children: [
-                                    const SizedBox(height: 10,),
                                     MyTextBox(
                                       text: userdata['age'],
                                       sectionName: 'age',
@@ -185,7 +179,20 @@ class _ProfilePageState extends State<FarmerProfilePage> {
                     ),
                     SizedBox(height: 20,),
                     GestureDetector(
-                      onTap: () => storeData(),
+                      onTap: () {
+                        fireStoreService.addFProPic(
+                            widget.username,
+                            image,
+                            'image'
+                        );
+                        Fluttertoast.showToast(
+                          msg: "Profile Picture added successfully",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                        );
+                      },
                       child: Container(
                         width: 200,
                         height: 50,
@@ -227,7 +234,7 @@ class _ProfilePageState extends State<FarmerProfilePage> {
                                     Navigator.of(context).pop();
                                     setState(() {
                                       // Update premium field in Firestore
-                                      FirebaseFirestore.instance.collection('farmer_users').doc('Farmer123').update({
+                                      FirebaseFirestore.instance.collection('farmer_users').doc(widget.username).update({
                                         'premium': false,
                                       }).then((_) {
                                         print('Premium activated successfully');

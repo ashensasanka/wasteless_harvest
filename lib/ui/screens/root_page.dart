@@ -30,8 +30,8 @@ class _RootPageState extends State<RootPage> {
   //List of the pages
   List<Widget> _widgetOptions(){
     return [
-      const FarmerHomePage(),
-      const BuyerProfilePage(),
+      const FarmerHomePage(username: '',),
+      const BuyerProfilePage(username: '',),
     ];
   }
 

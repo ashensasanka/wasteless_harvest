@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmer/model/crops/crops.dart';
 import 'package:farmer/model/rate_comment/rate_comment.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:intl/intl.dart';
 
 import '../model/add_listing/add_listing.dart';
 import '../model/message/message.dart';
@@ -21,6 +23,7 @@ class HomeController extends GetxController{
   // defined the variables as FirebaseFirestore store data as key value and FirebaseStorage store data as files
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseStorage storage = FirebaseStorage.instance;
+  User? user = FirebaseAuth.instance.currentUser;
   //Defined the Collections variables of database
   late CollectionReference cropCollection;
   late CollectionReference addlistingCollection;
@@ -32,14 +35,9 @@ class HomeController extends GetxController{
   
   // Text controllers from Add product page
   TextEditingController productNameCtrl = TextEditingController();
-  TextEditingController productDescriptionCtrl = TextEditingController();
-  TextEditingController productImgCtrl = TextEditingController();
-  TextEditingController productPriceCtrl = TextEditingController();
   TextEditingController cropPlantCtrl = TextEditingController();
   TextEditingController cropHarvestCtrl = TextEditingController();
   // Text Create listing
-  TextEditingController addlistNameCtrl = TextEditingController();
-  TextEditingController addlistImgCtrl = TextEditingController();
   TextEditingController addlistAmountCtrl = TextEditingController();
   TextEditingController addlistStartPriceCtrl = TextEditingController();
 
@@ -60,9 +58,11 @@ class HomeController extends GetxController{
   DateTime? logday;
   String? lat,long;
   String croptype = 'Type';
+  String listingtype = 'Type';
   String cropcatg = 'Category';
+  String listingcatg = 'Category';
   List<String> cropcatgItems = [];
-  String addlistingtype = 'Type';
+  List<String> listingcatgItems = [];
   String brand = 'Fish Category';
   String from = 'To';
   bool offer = false;
@@ -96,7 +96,6 @@ class HomeController extends GetxController{
   @override
   void onInit() async {
     // TODO: implement onInit
-    cropCollection = firestore.collection('farmer'); //addCrop, fetchMycrops
     addlistingCollection =firestore.collection('add_listing'); //addListing, fetchfarmerListingDetails
     postdetailsCollection = firestore.collection('postdetails'); //addPost, fetchPostsList
     messageCollection = firestore.collection('message'); //addMessage, fetchMessage
@@ -106,12 +105,41 @@ class HomeController extends GetxController{
     await fetchMycrops();
     await fetchPostsList();
     await fetchMessage();
-    await fetchfarmerListingDetails();
-    await fetchListingDetails();
+    await fetchfarmerListingDetails('');
+    await fetchListingDetails('');
     await fetchRatesComment();
     await fetchuser1Comment();
     super.onInit();
   }
+
+  String getImageUrlForCropCategory(String cropCategory) {
+    switch (cropCategory) {
+      case 'Red rice':
+        return 'https://w7.pngwing.com/pngs/459/740/png-transparent-green-wheat-rice-paddy-field-rice-paddy-grass-paddy-plantation-thumbnail.png';
+      case 'Nadu rice':
+        return 'https://w7.pngwing.com/pngs/459/740/png-transparent-green-wheat-rice-paddy-field-rice-paddy-grass-paddy-plantation-thumbnail.png';
+      case 'Carrot':
+        return 'https://www.shutterstock.com/image-photo/carrot-isolated-on-white-background-600nw-795704785.jpg';
+      case 'Beetroot':
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToIeorunW12mLROfwi7xTyb7Jk_9kjN0rtzAbIVLnVwg&s';
+      case 'Mango':
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK5-BXZ8nS191UtUteJqB_iLbahSam1PDdYweqpAzqng&s';
+      case 'Ranbuttan':
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqZuh6vrwpMrvHyWs5ZNR-701Z5YbBk58ZGPuWmGl9bA&s';
+      case 'Ratala':
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW88VEtkuuY_WOTzBk1q2SWaCrAH4HddwaxBHfaa2jyA&s';
+      case 'Kiri ala':
+        return 'https://doa.gov.lk/wp-content/uploads/2020/07/isuru-kiriala.png';
+      case 'Green Gram (Mung Beans)':
+        return 'https://media.istockphoto.com/id/1310279351/photo/macro-close-up-of-organic-green-gram-or-whole-green-moong-dal-on-a-white-ceramic-soup-spoon.jpg?s=612x612&w=0&k=20&c=Egs5PIbNT46cLexABLLAwQ1mjp4cH6qGbYK3KYEkY3Q=';
+      case 'Cowpeas':
+        return 'https://m.media-amazon.com/images/I/51TezATUHML._AC_UF1000,1000_QL80_.jpg';
+
+      default:
+        return 'https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png';
+    }
+  }
+
   add1CommentRate(){
     try {
       int pressingTime = DateTime.now().toUtc().millisecondsSinceEpoch;
@@ -148,39 +176,49 @@ class HomeController extends GetxController{
     }
   }
   // Add product details into product collection
-  addCrop(){
-    try {
-      DocumentReference doc = cropCollection.doc(); //farmer
-      Crops crops = Crops(
-        id:doc.id,
-        name:cropcatg,
-        type: croptype,
-        description: productDescriptionCtrl.text,
-        price: double.tryParse(productPriceCtrl.text),
-        image: productImgCtrl.text,
-        plant_date:cropPlantCtrl.text,
-        harvest_date:cropHarvestCtrl.text
-      );
-      final productJson = crops.toJson();
-      doc.set(productJson);
-      Get.snackbar('Success', 'Product added successfully', colorText: Colors.green);
-      setValuesDefault();
-    } catch (e) {
-      Get.snackbar('Error', e.toString(), colorText: Colors.red);
-    }
+  addCrop(String username, String plantDate, String harvestDate){
+    //
+      CollectionReference collection = FirebaseFirestore.instance.collection('addcrop${username}');
+      try {
+        DocumentReference doc = collection.doc(); //farmer
+        Crops crops = Crops(
+            id:doc.id,
+            name:cropcatg,
+            type: croptype,
+            image: getImageUrlForCropCategory(cropcatg),
+            plant_date:plantDate,
+            harvest_date:harvestDate
+        );
+        final productJson = crops.toJson();
+        doc.set(productJson);
+        Get.snackbar('Success', 'Product added successfully', colorText: Colors.green);
+        setValuesDefault();
+      } catch (e) {
+        Get.snackbar('Error', e.toString(), colorText: Colors.red);
+      }
   }
   //create_new_listing, FarmerAddListing
-  addListing(){
+  addListing(String userName,File? selectedImage, String filetype) async {
+    CollectionReference collection = FirebaseFirestore.instance.collection('add_listing${userName}');
     DateTime currentDate = DateTime.now();
     String trimmedDate = DateTime(currentDate.year, currentDate.month, currentDate.day).toString();
     String result = trimmedDate.split(' ')[0];//create_new_listing, FarmerAddListing
     try {
-      DocumentReference doc = addlistingCollection.doc(); //add_listing
+      if (selectedImage == null){
+        Get.snackbar('Error', 'Please select an image', colorText: Colors.red);
+        return;
+      }
+      final imagePath = 'listing/listing${DateTime.now().millisecondsSinceEpoch}';
+      final Reference storageReference = storage.ref().child(imagePath);
+      final metadata = SettableMetadata(contentType: filetype);
+      await storageReference.putFile(selectedImage, metadata);
+      final String imageUrl = await storageReference.getDownloadURL();
+      DocumentReference doc = collection.doc(); //add_listing
       AddListing addlisting = AddListing(
           id:doc.id,
-          name:addlistNameCtrl.text,
-          type: addlistingtype,
-          image: addlistImgCtrl.text,
+          name:listingcatg,
+          type: listingtype,
+          image: imageUrl,
           amount:double.tryParse(addlistAmountCtrl.text),
           stating_price:double.tryParse(addlistStartPriceCtrl.text),
           hbidname:'',
@@ -235,18 +273,15 @@ class HomeController extends GetxController{
   }
 
   setValuesDefault(){
-    addlistNameCtrl.clear();
-    addlistImgCtrl.clear();
     addlistAmountCtrl.clear();
     addlistStartPriceCtrl.clear();
-    addlistingtype= 'Type';
     productNameCtrl.clear();
-    productPriceCtrl.clear();
-    productDescriptionCtrl.clear();
-    productImgCtrl.clear();
     cropPlantCtrl.clear();
     cropHarvestCtrl.clear();
     croptype = 'Type';
+    cropcatg = '';
+    listingtype = 'Type';
+    listingcatg ='';
     update();
   }
 
@@ -264,9 +299,10 @@ class HomeController extends GetxController{
     }
   }
 
-  fetchfarmerListingDetails() async {
+  fetchfarmerListingDetails(String username) async {
+    CollectionReference collection = FirebaseFirestore.instance.collection('add_listing${username}');
     try {
-      QuerySnapshot cartdetailsSnapshot = await addlistingCollection.get(); //add_listing
+      QuerySnapshot cartdetailsSnapshot = await collection.get(); //add_listing
       final List<AddListing> retrievedLog = cartdetailsSnapshot.docs.map((doc) => AddListing.fromJson(doc.data() as Map<String, dynamic>)).toList();
       farmerlistingsShowInUi.clear();
       farmerlistingsShowInUi.assignAll(retrievedLog);
@@ -278,14 +314,15 @@ class HomeController extends GetxController{
     }
   }
   // Fetch the cart details from cart details collection
-  fetchListingDetails() async {
+  fetchListingDetails(String username) async {
+    CollectionReference collection = FirebaseFirestore.instance.collection('addcrop${username}');
     try {
-      QuerySnapshot cartdetailsSnapshot = await listingCollection.get(); //farmer
+      QuerySnapshot cartdetailsSnapshot = await collection.get(); //farmer
       final List<Crops> retrievedLog = cartdetailsSnapshot.docs.map((doc) => Crops.fromJson(doc.data() as Map<String, dynamic>)).toList();
       listings.clear();
       listings.assignAll(retrievedLog);
       listingsShowInUi.assignAll(listings); //BidsWon(),  ShopPage()
-      Get.snackbar('Success', 'CartDetails fetch successfully', colorText: Colors.green);
+      Get.snackbar('Success', 'MyCropDetails fetch successfully', colorText: Colors.green);
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     } finally{

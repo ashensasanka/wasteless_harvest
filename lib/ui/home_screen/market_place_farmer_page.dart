@@ -8,7 +8,8 @@ import '../market_palce_buyer/shop_page.dart';
 import '../market_place_farmer/create_new_listing.dart';
 
 class FarmerMarketPlacePage extends StatefulWidget {
-  const FarmerMarketPlacePage({Key? key}) : super(key: key);
+  final String username;
+  const FarmerMarketPlacePage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<FarmerMarketPlacePage> createState() => _FarmerMarketPlacePageState();
@@ -74,7 +75,7 @@ class _FarmerMarketPlacePageState extends State<FarmerMarketPlacePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MyListingPage(),
+                            builder: (context) => MyListingPage(username: widget.username,),
                           ),
                         );
                       } else {
@@ -140,7 +141,7 @@ class _FarmerMarketPlacePageState extends State<FarmerMarketPlacePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FarmerAddListing(),
+                            builder: (context) => FarmerAddListing(username: widget.username,),
                           ),
                         );
                       } else {

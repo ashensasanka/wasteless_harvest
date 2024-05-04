@@ -415,7 +415,9 @@ class _SignUpState extends State<SignUpBuyer> {
       phoneNumber: buyerphoneController.text.trim(),
       uid: "Buyer",
       name: "",
-      age: ""
+      age: "",
+      premium:false,
+      imageURL: ""
     );
     if (buyerusernameController != null) {
       ap.saveBuyerUserDataToFirebase(

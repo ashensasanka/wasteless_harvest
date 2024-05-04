@@ -89,7 +89,7 @@ class _RateComFarmPageState extends State<RateComFarmPage> {
                       const SizedBox(height: 20,),
                       Expanded(
                         child: StreamBuilder(
-                          stream: FirebaseFirestore.instance.collection('rate_comment')
+                          stream: FirebaseFirestore.instance.collection('farmer_users')
                               .where('name', isGreaterThanOrEqualTo: _searchController.text)
                               .where('name', isLessThan: _searchController.text + 'z')
                               .snapshots(),
@@ -114,7 +114,7 @@ class _RateComFarmPageState extends State<RateComFarmPage> {
                                   return RateCard(
                                     index: index,
                                     name: data['name'] ?? 'No name',
-                                    imageUrl: data['image'] ?? 'url',
+                                    imageUrl: data['imageUrl'] ?? 'url',
                                     rate: data['rate'] ?? 00,
                                     onTap: () {
                                       Get.to(const CommentDescriptionPage(), arguments: {'data':documents[index]});

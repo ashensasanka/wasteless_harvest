@@ -12,13 +12,11 @@ import 'package:intl/intl.dart';
 
 class EditCropPage extends StatefulWidget {
   final int index;
-  final String description;
   final String plant_date;
   final String harvest_date;
 
   const EditCropPage({super.key,
     required this.index,
-    required this.description,
     required this.plant_date,
     required this.harvest_date});
 
@@ -194,17 +192,6 @@ class _EditCropPageState extends State<EditCropPage> {
                                       ),
                                     ),
                                     SizedBox(height: 10,),
-                                    Container(
-                                      width: 160,
-                                      child: Text(
-                                        "${widget.description}",
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
@@ -424,7 +411,7 @@ class _EditCropPageState extends State<EditCropPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MyCropsPage(),
+                          builder: (context) => MyCropsPage(username: '',),
                         ),
                       );
                     },

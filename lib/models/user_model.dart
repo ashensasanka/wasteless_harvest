@@ -8,6 +8,8 @@ class UserModel {
   String uid;
   String name;
   String age;
+  bool premium;
+  String imageURL;
 
   UserModel({
     required this.username,
@@ -19,6 +21,8 @@ class UserModel {
     required this.uid,
     required this.name,
     required this.age,
+    required this.premium,
+    required this.imageURL,
   });
 
   // from map
@@ -33,6 +37,8 @@ class UserModel {
       uid: map['uid'] ?? '',
       name : map['name'] ?? '',
       age: map['age'] ?? '',
+      premium:map['premium'],
+      imageURL:map['imageURL']
     );
   }
 
@@ -47,7 +53,9 @@ class UserModel {
       "phoneNumber": phoneNumber,
       "uid": uid,
       "name":name,
-      "age":age
+      "age":age,
+      "premium":premium,
+      "imageURL":""
     };
   }
 }

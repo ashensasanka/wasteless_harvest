@@ -11,7 +11,8 @@ import '../../models/user_image_model.dart';
 import '../../provider/auth_provider.dart';
 import '../../utils/utils.dart';
 class AexpertProfilePage extends StatefulWidget {
-  const AexpertProfilePage({Key? key}) : super(key: key);
+  final String username;
+  const AexpertProfilePage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<AexpertProfilePage> createState() => _ProfilePageState();

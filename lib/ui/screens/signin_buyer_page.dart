@@ -132,7 +132,7 @@ class _SignInBuyerState extends State<SignInBuyer> {
                         Navigator.pushReplacement(
                           context,
                           PageTransition(
-                            child: const BuyerRootPage(),
+                            child: BuyerRootPage(username: username,),
                             type: PageTransitionType.bottomToTop,
                           ),
                         );

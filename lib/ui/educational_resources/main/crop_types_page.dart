@@ -4,7 +4,7 @@ import '../../../constants/constants.dart';
 import '../../../models/home_details.dart';
 import '../../home_screen/community_forum_page.dart';
 import '../../home_screen/crop_management_page.dart';
-import '../../home_screen/educational_resources_page.dart';
+import '../../home_screen/Feducational_resources_page.dart';
 import '../../home_screen/market_place_buyer_page.dart';
 import '../../home_screen/rate_comment_farmer_page.dart';
 import '../../home_screen/farmer_report_page.dart';

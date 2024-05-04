@@ -23,6 +23,13 @@ class _VegetablePageState extends State<VegetablePage> {
     {'name': 'Okra', 'imageurl': 'assets/images/okra.png', 'description':'At present it is cultivated successfully in Hambanthota, Kurunegala, Rathnapura and Mathale districts and spreading into Anuradhapura, puttalam. Mathara, Badulla and Moneragala districts. Consumes young pods, but leaves are a delicacy in India and Africa. Nutrient level is very high, fibres, minerals, especially calcium and Iodine are presence in immature pods. Okra plays an important role in controlling thyroxine related disease since calcium and iodine availability is high.'},
     {'name': 'Bean', 'imageurl': 'assets/images/beans.png', 'description':'Bean belongs to the family Fabaceae and Genus Phaseolus.  It is widely cultivated in Badulla, Nuwara Eliya, Matale and Kandy Districts. Areas with high temperature (>32 ⁰C) and continuous high rainfall is unsuitable for bean cultivation. Temperature should be less than 30⁰C at the time of flowering because high temperature adversely effect on flowering and pod setting. Although bean is mainly cultivated in Up Country Intermediate Zone, it can also be cultivated in Up Country Wet Zone.'}
   ];
+  List<Map<String, dynamic>> filteredUsers = []; // Add filtered users list
+  TextEditingController searchController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    filteredUsers = users; // Initialize filtered users list with all users
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,26 +43,64 @@ class _VegetablePageState extends State<VegetablePage> {
             Navigator.of(context).pop();
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Clear the previous search results when the search icon is tapped
+              searchController.clear();
+              setState(() {
+                filteredUsers = users;
+              });
+            },
+          ),
+        ],
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 1.9,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-        itemCount: 8,
-        itemBuilder: (context, index) {
-            return DetailsCard(
-              index: index,
-              name: users[index]['name'] ?? '',
-              imageUrl: users[index]['imageurl'] ?? '',
-              onTap: () {
-                Get.to(const DescriptionPage(), arguments: {'data': users[index]});
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              onChanged: (value) {
+                // Filter the users based on the search query
+                setState(() {
+                  filteredUsers = users.where((user) =>
+                      user['name'].toString().toLowerCase().contains(value.toLowerCase())).toList();
+                });
               },
-            );
-        },
-      )
+              decoration: InputDecoration(
+                hintText: 'Search by name...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                childAspectRatio: 1.9,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+              ),
+              itemCount: filteredUsers.length,
+              itemBuilder: (context, index) {
+                return DetailsCard(
+                  index: index,
+                  name: filteredUsers[index]['name'] ?? '',
+                  imageUrl: filteredUsers[index]['imageurl'] ?? '',
+                  onTap: () {
+                    Get.to(const DescriptionPage(), arguments: {'data': filteredUsers[index]});
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -2,14 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+class BPaymentPage extends StatefulWidget {
+  final String userName;
+  const BPaymentPage({super.key, required this.userName});
 
   @override
-  State<PaymentPage> createState() => _PaymentPageState();
+  State<BPaymentPage> createState() => _BPaymentPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _BPaymentPageState extends State<BPaymentPage> {
   bool isChecked = false;
   TextEditingController _cardnumEditingController = TextEditingController();
   TextEditingController _exdateEditingController = TextEditingController();
@@ -479,7 +480,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                           setState(() {
                                             isTextFieldVisible = !isTextFieldVisible;
                                             // Update premium field in Firestore
-                                            FirebaseFirestore.instance.collection('farmer_users').doc('Farmer123').update({
+                                            FirebaseFirestore.instance.collection('buyer_users').doc(widget.userName).update({
                                               'premium': true,
                                             }).then((_) {
                                               print('Premium activated successfully');

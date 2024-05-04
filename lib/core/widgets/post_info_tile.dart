@@ -37,7 +37,6 @@ class PostInfoTile extends StatelessWidget {
                     GestureDetector(
                       onTap: () {},
                       child: CircleAvatar(
-                        // backgroundImage: NetworkImage(userId.makePostUi[1].image as String),
                         backgroundImage: NetworkImage('https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg'),
                       ),
                     ),
@@ -165,10 +164,6 @@ class _PostButtonsState extends State<PostButtons> {
         const IconTextButton(
           icon: FontAwesomeIcons.solidMessage,
           label: 'Comment',
-        ),
-        const IconTextButton(
-          icon: FontAwesomeIcons.share,
-          label: 'Share',
         ),
       ],
     );

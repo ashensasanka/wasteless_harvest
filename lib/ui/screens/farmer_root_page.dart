@@ -18,7 +18,8 @@ import '../menu_bar/terms_condition.dart';
 
 
 class FarmerRootPage extends StatefulWidget {
-  const FarmerRootPage({Key? key}) : super(key: key);
+  final String username;
+  FarmerRootPage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<FarmerRootPage> createState() => _FarmerRootPageState();
@@ -31,8 +32,8 @@ class _FarmerRootPageState extends State<FarmerRootPage> {
   //List of the pages
   List<Widget> _widgetOptions(){
     return [
-      const FarmerHomePage(),
-      const FarmerProfilePage(),
+      FarmerHomePage(username:widget.username),
+      FarmerProfilePage(username: widget.username,),
     ];
   }
 
@@ -54,6 +55,7 @@ class _FarmerRootPageState extends State<FarmerRootPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor:Color(0xffe1f6cb),
+        automaticallyImplyLeading: false,
         actions: [
           PopupMenuButton(
             offset: Offset(0, 50),
@@ -144,11 +146,14 @@ class _FarmerRootPageState extends State<FarmerRootPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(titleList[_bottomNavIndex], style: TextStyle(
-              color: Constants.blackColor,
-              fontWeight: FontWeight.w500,
-              fontSize: 24,
-            ),),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(100, 0, 0, 0),
+              child: Text(titleList[_bottomNavIndex], style: TextStyle(
+                color: Constants.blackColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 24,
+              ),),
+            ),
             Icon(Icons.notifications, color: Constants.blackColor, size: 30.0,)
           ],
         ),

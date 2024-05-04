@@ -61,7 +61,7 @@ class _EnrollerPageState extends State<EnrollerPage> {
                       ? Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context)=> const FarmerHomePage()))
+                              builder: (context)=> const FarmerHomePage(username: '',)))
                       : Navigator.push(
                           context,
                           MaterialPageRoute(

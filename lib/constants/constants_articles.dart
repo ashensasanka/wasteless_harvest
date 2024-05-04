@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ui/educational_resources/main/fposts_screen.dart';
 import '../ui/educational_resources/main/posts_screen.dart';
 
 class Constants {
@@ -26,25 +27,7 @@ class Constants {
       ),
       Tab(
         icon: Icon(
-          index == 1 ? Icons.group : Icons.group_outlined,
-          color: Colors.blue,
-        ),
-      ),
-      Tab(
-        icon: Icon(
           index == 2 ? Icons.smart_display : Icons.smart_display_outlined,
-          color: Colors.blue,
-        ),
-      ),
-      Tab(
-        icon: Icon(
-          index == 3 ? Icons.account_circle : Icons.account_circle_outlined,
-          color: Colors.blue,
-        ),
-      ),
-      Tab(
-        icon: Icon(
-          index == 5 ? Icons.density_medium : Icons.density_medium_outlined,
           color: Colors.blue,
         ),
       ),
@@ -53,10 +36,11 @@ class Constants {
 
   static const List<Widget> screens = [
     PostsScreen(),
-    Center(child: Text('Friends Screen'),),
     Center(child: Text('Videos Screen'),),
-    Center(child: Text('Profile Screen'),),
-    Center(child: Text('Settings Screen'),),
+  ];
+  static const List<Widget> fscreens = [
+    FPostsScreen(),
+    Center(child: Text('Videos Screen'),),
   ];
 
   Constants._();

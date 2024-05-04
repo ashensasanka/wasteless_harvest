@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../../controller/home_controller.dart';
 import '../widgets/drop_down_btn.dart';
 
 class FarmerAddListing extends StatefulWidget {
-  const FarmerAddListing({super.key});
+  final String username;
+  const FarmerAddListing({super.key, required this.username});
 
   @override
   State<FarmerAddListing> createState() => _FarmerAddListingState();
 }
 
 class _FarmerAddListingState extends State<FarmerAddListing> {
+  List<String> getCategoriesForCropType(String cropType) {
+    switch (cropType) {
+      case 'Paddy':
+        return ['Nadu rice', 'Red rice'];
+      case 'Vegetables':
+        return ['Carrot', 'Beetroot'];
+      case 'Fruits':
+        return ['Mango', 'Ranbuttan'];
+      case 'Yams':
+        return ['Ratala', 'Kiri ala'];
+      case 'Pulses and ceriels':
+        return ['Green Gram (Mung Beans)', 'Cowpeas'];
+      default:
+        return [];
+    }
+  }
+  File? _image;
+
+  Future<void> _getImageFromGallery() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) =>
       GetBuilder<HomeController>(builder:(ctrl) {
@@ -37,35 +66,63 @@ class _FarmerAddListingState extends State<FarmerAddListing> {
                 ),
               ),
               margin: const EdgeInsets.all(10),
-              width: 400,
-              height: 720,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 80),
-                  TextField(
-                    controller: ctrl.addlistNameCtrl,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.black), // Change border color here
-                      ),
-                      labelText: 'Name', // Changed 'label' to 'labelText' for the newer version of Flutter
-                      hintText: 'Enter Name',
-                      labelStyle: TextStyle(fontWeight: FontWeight.bold), // Make label bold
+                  Container(
+                    width: 200, // Set width as per your requirement
+                    color: Colors.green, // Set the desired background color here
+                    child: DropDownBtn(
+                      items: const ['Paddy', 'Vegetables', 'Fruits', 'Yams', 'Pulses and ceriels'],
+                      selectedItemText: ctrl.listingtype,
+                      onSelected: (selectedValue) {
+                        setState(() {
+                          ctrl.listingtype = selectedValue ?? 'Type';
+                          ctrl.listingcatgItems  = getCategoriesForCropType(selectedValue ?? '');
+                        });
+                        ctrl.update();
+                      },
                     ),
                   ),
                   const SizedBox(height: 15),
-                  TextField(
-                    controller: ctrl.addlistImgCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        label: const Text('Image URL'),
-                        hintText: 'Enter Your Image URL'
+                  Container(
+                    width: 200, // Set width as per your requirement
+                    color: Colors.green, // Set the desired background color here
+                    child: DropDownBtn(
+                      items: ctrl.listingcatgItems,
+                      selectedItemText: ctrl.listingcatg,
+                      onSelected: (selectedValue) {
+                        ctrl.listingcatg = selectedValue ?? 'Category';
+                        ctrl.update();
+                      },
                     ),
                   ),
+                  const SizedBox(height: 15),
+                  GestureDetector(
+                    onTap: _getImageFromGallery,
+                    child: Container(
+                      width: 300,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Set the background color
+                        borderRadius:
+                        BorderRadius.circular(20), // Round the borders
+                      ),
+                      child: _image != null
+                          ? Image.file(
+                        _image!,
+                        fit: BoxFit.cover,
+                      )
+                          : Icon(
+                        Icons
+                            .add_photo_alternate, // Add an icon for image selection
+                        size: 100,
+                        color: Colors.grey, // Set the icon color
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   const SizedBox(height: 15),
                   TextField(
                     controller: ctrl.addlistAmountCtrl,
@@ -78,19 +135,6 @@ class _FarmerAddListingState extends State<FarmerAddListing> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Container(
-                    width: 200, // Set width as per your requirement
-                    color: Colors.green, // Set the desired background color here
-                    child: DropDownBtn(
-                      items: const ['Type5', 'Type6', 'Type7', 'Type8'],
-                      selectedItemText: ctrl.addlistingtype,
-                      onSelected: (selectedValue) {
-                        ctrl.addlistingtype = selectedValue ?? 'Type';
-                        ctrl.update();
-                      },
-                    ),
-                  ),
-
                   const SizedBox(height: 15),
                   TextField(
                     controller: ctrl.addlistStartPriceCtrl,
@@ -110,7 +154,7 @@ class _FarmerAddListingState extends State<FarmerAddListing> {
                       minimumSize: Size(170, 40), // Set width and height as per your requirement
                     ),
                     onPressed: () {
-                      ctrl.addListing();
+                      ctrl.addListing(widget.username,_image, 'image');
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -141,6 +185,7 @@ class _FarmerAddListingState extends State<FarmerAddListing> {
                         );
                       },
                       );
+                      _image=null;
                     },
                     child: const Text('Create', style: TextStyle(fontSize: 20),),
                   ),

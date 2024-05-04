@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 
 import '../../constants/constants.dart';
 import '../../models/enrollers.dart';
-import '../educational_resources/main/articles_page.dart';
+import '../educational_resources/main/Earticles_page.dart';
 import '../educational_resources/main/best_practices_page.dart';
 import '../educational_resources/main/crop_types_page.dart';
 import '../market_palce_buyer/bids_won_page.dart';
 import '../market_palce_buyer/shop_page.dart';
 
-class EducatResoPage extends StatefulWidget {
-  const EducatResoPage({super.key});
+class EEducatResoPage extends StatefulWidget {
+  final String username;
+  const EEducatResoPage({super.key, required this.username});
 
   @override
-  State<EducatResoPage> createState() => _EducatResoPageState();
+  State<EEducatResoPage> createState() => _EEducatResoPageState();
 }
 
-class _EducatResoPageState extends State<EducatResoPage> {
+class _EEducatResoPageState extends State<EEducatResoPage> {
   bool isPremium = false; // Flag to track premium status
 
   @override
@@ -28,7 +29,7 @@ class _EducatResoPageState extends State<EducatResoPage> {
 
   Future<void> checkPremiumStatus() async {
     // Retrieve the premium field value for the current user from Firestore
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('farmer_users').doc('Farmer123').get();
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('expert_users').doc(widget.username).get();
     // Check if the premium field exists and if it's true
     if (userDoc.exists && userDoc.get('premium') == true) {
       setState(() {
@@ -136,7 +137,7 @@ class _EducatResoPageState extends State<EducatResoPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ArticlesPage(),
+                        builder: (context) => EArticlesPage(),
                       ),
                     );
                   } else {

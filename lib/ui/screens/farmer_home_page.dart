@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:farmer/constants/constants.dart';
 import '../../models/home_details.dart';
 import '../home_screen/crop_management_page.dart';
-import '../home_screen/educational_resources_page.dart';
+import '../home_screen/Feducational_resources_page.dart';
 import '../home_screen/market_place_farmer_page.dart';
 import '../home_screen/farmer_report_page.dart';
-import '../payment_screen/payment_page.dart';
+import '../payment_screen/farmer_payment_page.dart';
 
 class FarmerHomePage extends StatefulWidget {
-  const FarmerHomePage({Key? key}) : super(key: key);
+  final String username;
+  const FarmerHomePage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<FarmerHomePage> createState() => _HomePageState();
@@ -32,11 +33,15 @@ class _HomePageState extends State<FarmerHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             //CropManagementPage() & FarmerMarketPlacePage()
             Row(
               children: [
-                SizedBox(width: 25,),
+                SizedBox(
+                  width: 25,
+                ),
                 //CropManagementPage()
                 SizedBox(
                   height: 175,
@@ -45,7 +50,8 @@ class _HomePageState extends State<FarmerHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CropManagementPage(),
+                          builder: (context) =>
+                              CropManagementPage(username: widget.username),
                         ),
                       );
                     },
@@ -59,7 +65,8 @@ class _HomePageState extends State<FarmerHomePage> {
                             right: 10,
                             bottom: 60,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                              borderRadius: BorderRadius.circular(
+                                  20), // Adjust the radius according to your preference
                               child: Image.asset(homeDetails[0].imageURL),
                             ),
                           ),
@@ -98,7 +105,9 @@ class _HomePageState extends State<FarmerHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FarmerMarketPlacePage(),
+                          builder: (context) => FarmerMarketPlacePage(
+                            username: widget.username,
+                          ),
                         ),
                       );
                     },
@@ -112,7 +121,8 @@ class _HomePageState extends State<FarmerHomePage> {
                             right: 10,
                             bottom: 45,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                              borderRadius: BorderRadius.circular(
+                                  20), // Adjust the radius according to your preference
                               child: Image.asset('assets/images/market.jpg'),
                             ),
                           ),
@@ -144,11 +154,15 @@ class _HomePageState extends State<FarmerHomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             //EducatResoPage() , CommForPage()
             Row(
               children: [
-                SizedBox(width: 25,),
+                SizedBox(
+                  width: 25,
+                ),
                 //EducatResoPage()
                 SizedBox(
                   height: 175,
@@ -157,7 +171,7 @@ class _HomePageState extends State<FarmerHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EducatResoPage(),
+                          builder: (context) => FEducatResoPage(username: widget.username,),
                         ),
                       );
                     },
@@ -171,8 +185,10 @@ class _HomePageState extends State<FarmerHomePage> {
                             right: 10,
                             bottom: 42,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
-                              child: Image.asset('assets/images/eduresorce.jpg'),
+                              borderRadius: BorderRadius.circular(
+                                  20), // Adjust the radius according to your preference
+                              child:
+                                  Image.asset('assets/images/eduresorce.jpg'),
                             ),
                           ),
                           Positioned(
@@ -223,7 +239,8 @@ class _HomePageState extends State<FarmerHomePage> {
                             right: 10,
                             bottom: 53,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                              borderRadius: BorderRadius.circular(
+                                  20), // Adjust the radius according to your preference
                               child: Image.asset('assets/images/community.jpg'),
                             ),
                           ),
@@ -256,12 +273,19 @@ class _HomePageState extends State<FarmerHomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             Row(
               children: [
-                SizedBox(width: 25,),
+                SizedBox(
+                  width: 25,
+                ),
                 StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance.collection('farmer_users').doc('Farmer123').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('farmer_users')
+                      .doc(widget.username)
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
@@ -272,60 +296,64 @@ class _HomePageState extends State<FarmerHomePage> {
                     }
 
                     bool isPremium = snapshot.data?['premium'] ?? false;
-
                     return !isPremium
                         ? SizedBox(
-                      height: 175,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PaymentPage(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 160,
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 10,
-                                right: 10,
-                                bottom: 42,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset('assets/images/payment.jpg'),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 5,
-                                left: 25,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                            height: 175,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FPaymentPage(userName: widget.username,),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: 160,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Stack(
                                   children: [
-                                    Text(
-                                      'Subscribe',
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
+                                    Positioned(
+                                      left: 10,
+                                      right: 10,
+                                      bottom: 42,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.asset(
+                                            'assets/images/payment.jpg'),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 5,
+                                      left: 25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Subscribe',
+                                            style: const TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff73B633),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                               ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0xff73B633),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                    )
-                        : SizedBox(width: 90,); // If premium is true, return an empty SizedBox
+                            ),
+                          )
+                        : SizedBox(
+                            width: 90,
+                          ); // If premium is true, return an empty SizedBox
                   },
                 ),
                 SizedBox(
@@ -349,7 +377,8 @@ class _HomePageState extends State<FarmerHomePage> {
                             right: 10,
                             bottom: 50,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                              borderRadius: BorderRadius.circular(
+                                  20), // Adjust the radius according to your preference
                               child: Image.asset('assets/images/report.jpg'),
                             ),
                           ),
@@ -379,7 +408,6 @@ class _HomePageState extends State<FarmerHomePage> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ],
@@ -388,4 +416,3 @@ class _HomePageState extends State<FarmerHomePage> {
     );
   }
 }
-

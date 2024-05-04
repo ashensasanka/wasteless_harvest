@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:intl/intl.dart';
 
 import '../../controller/home_controller.dart';
 import '../widgets/drop_down_btn.dart';
 
 class AddCropsPage extends StatefulWidget {
-  const AddCropsPage({super.key});
+  final String username;
+  const AddCropsPage({super.key, required this.username});
 
   @override
   State<AddCropsPage> createState() => _AddCropsPageState();
@@ -29,6 +32,21 @@ class _AddCropsPageState extends State<AddCropsPage> {
         return ['Green Gram (Mung Beans)', 'Cowpeas'];
       default:
         return [];
+    }
+  }
+  DateTime? _selectedDate;
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2010),
+      lastDate: DateTime(2050),
+    );
+
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      setState(() {
+        _selectedDate = pickedDate;
+      });
     }
   }
   @override
@@ -59,7 +77,7 @@ class _AddCropsPageState extends State<AddCropsPage> {
               width: double.maxFinite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 15),
                   Container(
                     width: 200, // Set width as per your requirement
@@ -91,49 +109,36 @@ class _AddCropsPageState extends State<AddCropsPage> {
                   ),
                   const SizedBox(height: 15),
                   const SizedBox(height: 15),
-                  TextField(
-                    controller: ctrl.productDescriptionCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        label: const Text('Crops Description'),
-                        hintText: 'Enter Your Crop Description'
-                    ),
-                    maxLines: 4,
-                  ),
-                  const SizedBox(height: 15),
-                  TextField(
-                    controller: ctrl.productImgCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        label: const Text('Image URL'),
-                        hintText: 'Enter Your Image URL'
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      ctrl.getImageUrlForCropCategory(ctrl.cropcatg),
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(height: 15),
-                  TextField(
-                    controller: ctrl.productPriceCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        label: const Text('Crop Price (Rs.)'),
-                        hintText: 'Enter Crop Price'
-                    ),
-                  ),
                   const SizedBox(height: 15),
-                  TextField(
-                    controller: ctrl.cropPlantCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        label: const Text('Plant Date'),
-                        hintText: 'Enter Plant Date (DD/MM/YYYY)'
-                    ),
+                  const SizedBox(height: 15),
+                  // TextField(
+                  //   controller: ctrl.cropPlantCtrl,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     labelText: 'Plant Date',
+                  //     hintText: 'Enter Plant Date (DD/MM/YYYY)',
+                  //   ),
+                  //   keyboardType: TextInputType.datetime,
+                  // ),
+                  _selectedDate != null
+                      ? Text(
+                      'Selected Date: ${DateFormat('dd/MM/yyyy').format(_selectedDate!)}')
+                      : Text('No date selected'),
+                  ElevatedButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text('Select Date'),
                   ),
                   const SizedBox(height: 15),
                   ElevatedButton(
@@ -143,11 +148,12 @@ class _AddCropsPageState extends State<AddCropsPage> {
                       minimumSize: Size(170, 40), // Set width and height as per your requirement
                     ),
                     onPressed: () {
-                      ctrl.addCrop();
+                      DateTime? harvestDate = _selectedDate?.add(Duration(days: 66));
+                      ctrl.addCrop(widget.username,'${DateFormat('dd/MM/yyyy').format(_selectedDate!)}','${DateFormat('dd/MM/yyyy').format(harvestDate!)}'); //
                     },
                     child: const Text('Add Crop'),
                   ),
-                  SizedBox(height: 115,)
+                  SizedBox(height: 180,)
                 ],
               ),
             ),

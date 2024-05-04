@@ -31,12 +31,11 @@ class CommentList extends StatelessWidget {
                       SizedBox(width: 20,),
                       Align(
                         alignment: Alignment.centerLeft, // Align to the start
-                        child: Text(ctrl.user1commentUi[index].name as String),
+                        child: Text("${ctrl.user1commentUi[index].name}"),
                       ),
                     ],
                   ),
                   SentComment(message: ctrl.user1commentUi[reversedIndex].message as String),
-
                 ],
               ),
             );

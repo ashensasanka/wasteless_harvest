@@ -20,7 +20,7 @@ class _ShopPageState extends State<ShopPage> {
     return GetBuilder<HomeController>(builder: (ctrl){
       return RefreshIndicator(
         onRefresh: () async{
-          ctrl.fetchfarmerListingDetails();
+          ctrl.fetchfarmerListingDetails('');
         },
         child: Scaffold(
           backgroundColor: Color(0xfff2f6df),

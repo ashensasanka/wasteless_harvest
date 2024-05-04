@@ -12,7 +12,8 @@ import '../screens/signin_farmer_page.dart';
 import '../screens/signing_aexpert_page.dart';
 
 class CropManagementPage extends StatefulWidget {
-  const CropManagementPage({super.key});
+  final String username;
+  const CropManagementPage({super.key, required this.username});
 
   @override
   State<CropManagementPage> createState() => _CropManagementPageState();
@@ -55,7 +56,7 @@ class _CropManagementPageState extends State<CropManagementPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MyCropsPage(),
+                          builder: (context) => MyCropsPage(username:widget.username),
                         ),
                       );
                     },
@@ -109,7 +110,7 @@ class _CropManagementPageState extends State<CropManagementPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const AddCropsPage(),
+                      builder: (context) => AddCropsPage(username:widget.username),
                     ),
                   );
                 },
