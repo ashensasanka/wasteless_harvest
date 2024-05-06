@@ -27,7 +27,7 @@ class _FarmerMarketPlacePageState extends State<FarmerMarketPlacePage> {
 
   Future<void> checkPremiumStatus() async {
     // Retrieve the premium field value for the current user from Firestore
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('farmer_users').doc('Farmer123').get();
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('farmer_users').doc(widget.username).get();
     // Check if the premium field exists and if it's true
     if (userDoc.exists && userDoc.get('premium') == true) {
       setState(() {
