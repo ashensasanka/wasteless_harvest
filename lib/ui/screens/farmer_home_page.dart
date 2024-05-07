@@ -363,7 +363,7 @@ class _HomePageState extends State<FarmerHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FarmerReportPage(),
+                          builder: (context) => FarmerReportPage(user: widget.username,),
                         ),
                       );
                     },

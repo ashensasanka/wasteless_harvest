@@ -7,41 +7,42 @@ import '../report/farmer_reports_page.dart';
 import '../report/statistics.dart';
 
 class FarmerReportPage extends StatefulWidget {
-  const FarmerReportPage({super.key});
+  final String user;
+  const FarmerReportPage({super.key, required this.user});
 
   @override
   State<FarmerReportPage> createState() => _ReportPageState();
 }
 
 class _ReportPageState extends State<FarmerReportPage> {
-  bool isPremium = false; // Flag to track premium status
+  bool isPremium = false;
 
   @override
   void initState() {
     super.initState();
-    // Call function to check premium status when the widget initializes
     checkPremiumStatus();
   }
 
   Future<void> checkPremiumStatus() async {
-    // Retrieve the premium field value for the current user from Firestore
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('farmer_users').doc('Farmer123').get();
-    // Check if the premium field exists and if it's true
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('farmer_users')
+        .doc(widget.user)
+        .get();
     if (userDoc.exists && userDoc.get('premium') == true) {
       setState(() {
         isPremium = true;
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     List<Enroller> _enrollList = Enroller.enrollList;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Color(0xffe1f6cb),
+        backgroundColor: Color(0xffe1f6cb),
         title: Text('Reports'),
-        // Add leading back button to navigate to HomePage
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -59,15 +60,18 @@ class _ReportPageState extends State<FarmerReportPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 40,),
+            SizedBox(
+              height: 40,
+            ),
             Row(
               children: [
-                SizedBox(width: 80,),
+                SizedBox(
+                  width: 80,
+                ),
                 SizedBox(
                   height: size.height * .3,
                   child: GestureDetector(
                     onTap: () {
-                      // Navigate to MyListingPage only if the user is premium
                       if (isPremium) {
                         Navigator.push(
                           context,
@@ -76,10 +80,12 @@ class _ReportPageState extends State<FarmerReportPage> {
                           ),
                         );
                       } else {
-                        // Show a message or handle the case when the user is not premium
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('You need to be a premium user to access this feature.'),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'You need to be a premium user to access this feature.'),
+                          ),
+                        );
                       }
                     },
                     child: Container(
@@ -92,7 +98,7 @@ class _ReportPageState extends State<FarmerReportPage> {
                             right: 10,
                             bottom: 75,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                              borderRadius: BorderRadius.circular(20),
                               child: Image.asset('assets/images/report1.jpg'),
                             ),
                           ),
@@ -124,12 +130,13 @@ class _ReportPageState extends State<FarmerReportPage> {
                 ),
               ],
             ),
-            SizedBox(height: 50,),
+            SizedBox(
+              height: 50,
+            ),
             SizedBox(
               height: size.height * .3,
               child: GestureDetector(
                 onTap: () {
-                  // Navigate to MyListingPage only if the user is premium
                   if (isPremium) {
                     Navigator.push(
                       context,
@@ -138,10 +145,12 @@ class _ReportPageState extends State<FarmerReportPage> {
                       ),
                     );
                   } else {
-                    // Show a message or handle the case when the user is not premium
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('You need to be a premium user to access this feature.'),
-                    ));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'You need to be a premium user to access this feature.'),
+                      ),
+                    );
                   }
                 },
                 child: Container(
@@ -154,7 +163,8 @@ class _ReportPageState extends State<FarmerReportPage> {
                         right: 10,
                         bottom: 65,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                          borderRadius: BorderRadius.circular(
+                              20),
                           child: Image.asset('assets/images/statistics.jpg'),
                         ),
                       ),
@@ -184,7 +194,9 @@ class _ReportPageState extends State<FarmerReportPage> {
                 ),
               ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
           ],
         ),
       ),

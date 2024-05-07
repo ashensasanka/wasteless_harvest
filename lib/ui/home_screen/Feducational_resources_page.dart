@@ -201,7 +201,6 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                       ),
                     );
                   } else {
-                    // Show a message or handle the case when the user is not premium
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text('You need to be a premium user to access this feature.'),
                     ));
@@ -217,7 +216,7 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                         right: 10,
                         bottom: 40,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                          borderRadius: BorderRadius.circular(20),
                           child: Image.asset('assets/images/best_practice.jpg'),
                         ),
                       ),
