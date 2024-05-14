@@ -17,7 +17,7 @@ class _BidsWonPageState extends State<BidsWonPage> {
     return GetBuilder<HomeController>(builder: (ctrl){
       return RefreshIndicator(
         onRefresh: () async{
-          ctrl.fetchListingDetails('');
+          ctrl.fetchMycrops('');
         },
         child: Scaffold(
           backgroundColor: Color(0xfff2f6df),

@@ -44,21 +44,25 @@ class _HomePageState extends State<BuyerHomePage> {
   }
 
   Future<void> checkPremiumStatus() async {
-    // Retrieve the premium field value for the current user from Firestore
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('buyer_users').doc(widget.username).get();
-    // Check if the premium field exists and if it's true
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('buyer_users')
+        .doc(widget.username)
+        .get();
     if (userDoc.exists && userDoc.get('premium') == true) {
-      setState(() {
-        isPremium = true;
-      });
+      setState(
+        () {
+          isPremium = true;
+        },
+      );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     List<HomeDetails> homeDetails = HomeDetails.homeDetails;
 
     return RefreshIndicator(
-      onRefresh:()async{
+      onRefresh: () async {
         checkPremiumStatus();
       },
       child: Scaffold(
@@ -72,10 +76,14 @@ class _HomePageState extends State<BuyerHomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 60,),
+              SizedBox(
+                height: 60,
+              ),
               Row(
                 children: [
-                  SizedBox(width: 25,),
+                  SizedBox(
+                    width: 25,
+                  ),
                   SizedBox(
                     height: 175,
                     child: GestureDetector(
@@ -84,19 +92,22 @@ class _HomePageState extends State<BuyerHomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BuyerMarketPlacePage(),
+                              builder: (context) => BuyerMarketPlacePage(username: widget.username,),
                             ),
                           );
                         } else {
-                          // Show a message or handle the case when the user is not premium
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('You need to be a premium user to access this feature.'),
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'You need to be a premium user to access this feature.'),
+                            ),
+                          );
                         }
                       },
                       child: Container(
                         width: 160,
-                        margin: EdgeInsets.symmetric(horizontal: 10), // Adjust the left margin
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 10), // Adjust the left margin
                         child: Stack(
                           children: [
                             Positioned(
@@ -146,15 +157,18 @@ class _HomePageState extends State<BuyerHomePage> {
                             ),
                           );
                         } else {
-                          // Show a message or handle the case when the user is not premium
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('You need to be a premium user to access this feature.'),
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'You need to be a premium user to access this feature.'),
+                            ),
+                          );
                         }
                       },
                       child: Container(
                         width: 160,
-                        margin: EdgeInsets.symmetric(horizontal: 10), // Adjust the right margin
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 10),
                         child: Stack(
                           children: [
                             Positioned(
@@ -163,7 +177,8 @@ class _HomePageState extends State<BuyerHomePage> {
                               bottom: 53,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/community.jpg'),
+                                child:
+                                    Image.asset('assets/images/community.jpg'),
                               ),
                             ),
                             Positioned(
@@ -195,10 +210,14 @@ class _HomePageState extends State<BuyerHomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               Row(
                 children: [
-                  SizedBox(width: 25,),
+                  SizedBox(
+                    width: 25,
+                  ),
                   SizedBox(
                     height: 175,
                     child: GestureDetector(
@@ -214,7 +233,8 @@ class _HomePageState extends State<BuyerHomePage> {
                         } else {
                           // Show a message or handle the case when the user is not premium
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('You need to be a premium user to access this feature.'),
+                            content: Text(
+                                'You need to be a premium user to access this feature.'),
                           ));
                         }
                       },
@@ -228,8 +248,10 @@ class _HomePageState extends State<BuyerHomePage> {
                               right: 10,
                               bottom: 47,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
-                                child: Image.asset('assets/images/rateandcomment.jpg'),
+                                borderRadius: BorderRadius.circular(
+                                    20), // Adjust the radius according to your preference
+                                child: Image.asset(
+                                    'assets/images/rateandcomment.jpg'),
                               ),
                             ),
                             Positioned(
@@ -273,7 +295,8 @@ class _HomePageState extends State<BuyerHomePage> {
                         } else {
                           // Show a message or handle the case when the user is not premium
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('You need to be a premium user to access this feature.'),
+                            content: Text(
+                                'You need to be a premium user to access this feature.'),
                           ));
                         }
                       },
@@ -287,7 +310,8 @@ class _HomePageState extends State<BuyerHomePage> {
                               right: 10,
                               bottom: 50,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                                borderRadius: BorderRadius.circular(
+                                    20), // Adjust the radius according to your preference
                                 child: Image.asset('assets/images/report.jpg'),
                               ),
                             ),
@@ -319,57 +343,65 @@ class _HomePageState extends State<BuyerHomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               SizedBox(
                 height: 175,
-                child: isPremium? SizedBox():GestureDetector(
-                  onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BPaymentPage(userName: widget.username,),
-                        ),
-                      );
-                  },
-                  child: Container(
-                    width: 160,
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 10,
-                          right: 10,
-                          bottom: 42,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
-                            child: Image.asset('assets/images/payment.jpg'),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 5,
-                          left: 25,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                child: isPremium
+                    ? SizedBox()
+                    : GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BPaymentPage(
+                                userName: widget.username,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 160,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Stack(
                             children: [
-                              Text(
-                                'Subscribe',
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
+                              Positioned(
+                                left: 10,
+                                right: 10,
+                                bottom: 42,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      20), // Adjust the radius according to your preference
+                                  child:
+                                      Image.asset('assets/images/payment.jpg'),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 5,
+                                left: 25,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Subscribe',
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
+                          decoration: BoxDecoration(
+                            color: Color(0xff73B633),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      color: Color(0xff73B633),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+                      ),
               ),
             ],
           ),
@@ -378,4 +410,3 @@ class _HomePageState extends State<BuyerHomePage> {
     );
   }
 }
-

@@ -3,8 +3,15 @@ part 'add_listing.g.dart';
 
 @JsonSerializable()
 class AddListing {
-  @JsonKey(name:"id")
-  String? id;
+
+  @JsonKey(name:"collName")
+  String? collName;
+
+  @JsonKey(name:"ownid")
+  String? ownid;
+
+  @JsonKey(name:"allid")
+  String? allid;
 
   @JsonKey(name:"name")
   String? name;
@@ -31,7 +38,9 @@ class AddListing {
   double? hbid;
 
   AddListing({
-    this.id,
+    this.collName,
+    this.ownid,
+    this.allid,
     this.name,
     this.type,
     this.image,

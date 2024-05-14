@@ -22,12 +22,14 @@ class BestPracticePage extends StatefulWidget {
 
 class _BestPracticePageState extends State<BestPracticePage> {
   @override
+
   Widget build(BuildContext context) {
+    double x = 120;
+    double y =180;
     return Scaffold(
       appBar: AppBar(
         backgroundColor:Color(0xffe1f6cb),
-        title: Text('Best Practices'),
-        // Add leading back button to navigate to HomePage
+        title: Text('Sustainable Practices'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -46,12 +48,12 @@ class _BestPracticePageState extends State<BestPracticePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 5,),
+              SizedBox(height: 25,),
               Row(
                 children: [
-                  SizedBox(width: 110,),
+                  SizedBox(width: 95,),
                   SizedBox(
-                    height: 175,
+                    height: x,
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -62,7 +64,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                         );
                       },
                       child: Container(
-                        width: 150,
+                        width: y,
                         margin: const EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,7 +75,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: Colors.white70,
-                                      fontSize: 15,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -88,9 +90,9 @@ class _BestPracticePageState extends State<BestPracticePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 5,),
+              SizedBox(height: 15,),
               SizedBox(
-                height: 175,
+                height: x,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -101,7 +103,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                     );
                   },
                   child: Container(
-                    width: 150,
+                    width: y,
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -112,7 +114,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 15,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -125,9 +127,9 @@ class _BestPracticePageState extends State<BestPracticePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(height: 15,),
               SizedBox(
-                height: 175,
+                height: x,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -138,7 +140,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                     );
                   },
                   child: Container(
-                    width: 150,
+                    width: y,
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -149,7 +151,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 15,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -162,9 +164,9 @@ class _BestPracticePageState extends State<BestPracticePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(height: 15,),
               SizedBox(
-                height: 175,
+                height: x,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -175,7 +177,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                     );
                   },
                   child: Container(
-                    width: 150,
+                    width: y,
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -186,7 +188,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 15,
+                            fontSize: 19,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -199,9 +201,9 @@ class _BestPracticePageState extends State<BestPracticePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(height: 15,),
               SizedBox(
-                height: 175,
+                height: x,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -212,7 +214,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                     );
                   },
                   child: Container(
-                    width: 150,
+                    width: y,
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,7 +225,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 15,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -236,6 +238,7 @@ class _BestPracticePageState extends State<BestPracticePage> {
                   ),
                 ),
               ),
+              SizedBox(height: 35,)
             ],
           ),
         ),

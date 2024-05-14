@@ -24,14 +24,14 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
   @override
   void initState() {
     super.initState();
-    // Call function to check premium status when the widget initializes
     checkPremiumStatus();
   }
 
   Future<void> checkPremiumStatus() async {
-    // Retrieve the premium field value for the current user from Firestore
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('farmer_users').doc(widget.username).get();
-    // Check if the premium field exists and if it's true
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('farmer_users')
+        .doc(widget.username)
+        .get();
     if (userDoc.exists && userDoc.get('premium') == true) {
       setState(() {
         isPremium = true;
@@ -43,9 +43,8 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Color(0xffe1f6cb),
+        backgroundColor: Color(0xffe1f6cb),
         title: Text('Educational Resources'),
-        // Add leading back button to navigate to HomePage
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -63,11 +62,15 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             //CropTypesPage()
             Row(
               children: [
-                SizedBox(width: 90,),
+                SizedBox(
+                  width: 90,
+                ),
                 //CropTypesPage()
                 SizedBox(
                   height: 220,
@@ -81,10 +84,12 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                           ),
                         );
                       } else {
-                        // Show a message or handle the case when the user is not premium
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('You need to be a premium user to access this feature.'),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'You need to be a premium user to access this feature.'),
+                          ),
+                        );
                       }
                     },
                     child: Container(
@@ -97,7 +102,7 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                             right: 10,
                             bottom: 35,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                              borderRadius: BorderRadius.circular(20),
                               child: Image.asset('assets/images/crop_info.jpg'),
                             ),
                           ),
@@ -129,7 +134,9 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                 ),
               ],
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             SizedBox(
               height: 220,
               child: GestureDetector(
@@ -142,9 +149,9 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                       ),
                     );
                   } else {
-                    // Show a message or handle the case when the user is not premium
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('You need to be a premium user to access this feature.'),
+                      content: Text(
+                          'You need to be a premium user to access this feature.'),
                     ));
                   }
                 },
@@ -158,7 +165,7 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                         right: 10,
                         bottom: 40,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                          borderRadius: BorderRadius.circular(20),
                           child: Image.asset('assets/images/articles.jpg'),
                         ),
                       ),
@@ -188,7 +195,9 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             SizedBox(
               height: 220,
               child: GestureDetector(
@@ -201,9 +210,12 @@ class _FEducatResoPageState extends State<FEducatResoPage> {
                       ),
                     );
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('You need to be a premium user to access this feature.'),
-                    ));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'You need to be a premium user to access this feature.'),
+                      ),
+                    );
                   }
                 },
                 child: Container(

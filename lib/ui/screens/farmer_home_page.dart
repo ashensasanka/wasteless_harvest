@@ -66,7 +66,7 @@ class _HomePageState extends State<FarmerHomePage> {
                             bottom: 60,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(
-                                  20), // Adjust the radius according to your preference
+                                  20),
                               child: Image.asset(homeDetails[0].imageURL),
                             ),
                           ),
@@ -186,7 +186,7 @@ class _HomePageState extends State<FarmerHomePage> {
                             bottom: 42,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(
-                                  20), // Adjust the radius according to your preference
+                                  20),
                               child:
                                   Image.asset('assets/images/eduresorce.jpg'),
                             ),
@@ -240,7 +240,7 @@ class _HomePageState extends State<FarmerHomePage> {
                             bottom: 53,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(
-                                  20), // Adjust the radius according to your preference
+                                  20),
                               child: Image.asset('assets/images/community.jpg'),
                             ),
                           ),

@@ -11,7 +11,6 @@ import 'package:page_transition/page_transition.dart';
 
 import 'buyer_root_page.dart';
 
-
 class SignInBuyer extends StatefulWidget {
   const SignInBuyer({Key? key}) : super(key: key);
 
@@ -35,12 +34,18 @@ class _SignInBuyerState extends State<SignInBuyer> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 60,),
+              SizedBox(
+                height: 60,
+              ),
               IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (_) => const EnrollerPage())); // Navigate back when the back button is pressed
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const EnrollerPage(),
+                    ),
+                  ); // Navigate back when the back button is pressed
                 },
               ),
               Image.asset('assets/images/signin.png'),
@@ -82,22 +87,29 @@ class _SignInBuyerState extends State<SignInBuyer> {
                       size: 22,
                     ),
                   ),
-                  suffixIconConstraints: const BoxConstraints(minWidth: 45, maxWidth: 46),
+                  suffixIconConstraints:
+                      const BoxConstraints(minWidth: 45, maxWidth: 46),
                   suffixIcon: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
+                      setState(
+                        () {
+                          isPasswordVisible = !isPasswordVisible;
+                        },
+                      );
                     },
                     child: Icon(
-                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       color: Colors.black,
                       size: 22,
                     ),
                   ),
                   border: InputBorder.none,
                   hintText: 'Enter Password....',
-                  hintStyle: const TextStyle(color: Color.fromRGBO(75, 93, 81, 1), fontSize: 16.5), // Set hint color here
+                  hintStyle: const TextStyle(
+                      color: Color.fromRGBO(75, 93, 81, 1),
+                      fontSize: 16.5), // Set hint color here
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
@@ -108,7 +120,6 @@ class _SignInBuyerState extends State<SignInBuyer> {
                   ),
                 ),
               ),
-
               const SizedBox(
                 height: 10,
               ),
@@ -116,7 +127,10 @@ class _SignInBuyerState extends State<SignInBuyer> {
                 onTap: () async {
                   try {
                     // Get the document snapshot from Firestore
-                    var snapshot = await FirebaseFirestore.instance.collection('buyer_users').doc(signbuyerusernameController.text).get();
+                    var snapshot = await FirebaseFirestore.instance
+                        .collection('buyer_users')
+                        .doc(signbuyerusernameController.text)
+                        .get();
 
                     // Check if the document exists
                     if (snapshot.exists) {
@@ -132,14 +146,17 @@ class _SignInBuyerState extends State<SignInBuyer> {
                         Navigator.pushReplacement(
                           context,
                           PageTransition(
-                            child: BuyerRootPage(username: username,),
+                            child: BuyerRootPage(
+                              username: username,
+                            ),
                             type: PageTransitionType.bottomToTop,
                           ),
                         );
                       } else {
                         // Display an error message for incorrect credentials
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Incorrect username or password")),
+                          SnackBar(
+                              content: Text("Incorrect username or password")),
                         );
                       }
                     } else {
@@ -152,7 +169,9 @@ class _SignInBuyerState extends State<SignInBuyer> {
                     // Handle any errors that occur during the Firestore operation
                     print("Error fetching user data: $error");
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("An error occurred. Please try again later.")),
+                      SnackBar(
+                          content: Text(
+                              "An error occurred. Please try again later.")),
                     );
                   }
                 },
@@ -163,7 +182,7 @@ class _SignInBuyerState extends State<SignInBuyer> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: const Center(
                     child: Text(
                       'Sign In',
@@ -254,6 +273,7 @@ class _SignInBuyerState extends State<SignInBuyer> {
       ),
     );
   }
+
   Widget textFeld({
     required String hintText,
     required IconData icon,

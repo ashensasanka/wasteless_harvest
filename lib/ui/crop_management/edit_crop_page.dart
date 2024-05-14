@@ -129,7 +129,7 @@ class _EditCropPageState extends State<EditCropPage> {
     return GetBuilder<HomeController>(builder: (ctrl) {
       return RefreshIndicator(
         onRefresh: () async{
-          ctrl.fetchMycrops();
+          ctrl.fetchMycrops('');
         },
         child: Scaffold(
           appBar: AppBar(

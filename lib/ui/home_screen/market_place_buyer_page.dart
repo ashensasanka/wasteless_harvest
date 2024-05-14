@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmer/ui/screens/root_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +13,8 @@ import '../screens/farmer_root_page.dart';
 import '../screens/farmer_home_page.dart';
 
 class BuyerMarketPlacePage extends StatefulWidget {
-  const BuyerMarketPlacePage({super.key});
+  final String username;
+  const BuyerMarketPlacePage({super.key, required this.username});
 
   @override
   State<BuyerMarketPlacePage> createState() => _MarketPlacePageState();
@@ -26,18 +26,20 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
   @override
   void initState() {
     super.initState();
-    // Call function to check premium status when the widget initializes
     checkPremiumStatus();
   }
 
   Future<void> checkPremiumStatus() async {
-    // Retrieve the premium field value for the current user from Firestore
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('buyer_users').doc('Buyer123').get();
-    // Check if the premium field exists and if it's true
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('buyer_users')
+        .doc('Buyer123')
+        .get();
     if (userDoc.exists && userDoc.get('premium') == true) {
-      setState(() {
-        isPremium = true;
-      });
+      setState(
+        () {
+          isPremium = true;
+        },
+      );
     }
   }
 
@@ -46,7 +48,7 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Color(0xffe1f6cb),
+        backgroundColor: Color(0xffe1f6cb),
         title: Text('Market Place'),
         // Add leading back button to navigate to the HomePage
         leading: IconButton(
@@ -66,27 +68,32 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 40,),
+            SizedBox(
+              height: 40,
+            ),
             Row(
               children: [
-                SizedBox(width: 80,),
+                SizedBox(
+                  width: 80,
+                ),
                 SizedBox(
                   height: size.height * .3,
                   child: GestureDetector(
                     onTap: () {
-                      // Navigate to MyListingPage only if the user is premium
                       if (isPremium) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ShopPage(),
+                            builder: (context) => ShopPage(username: widget.username,),
                           ),
                         );
                       } else {
-                        // Show a message or handle the case when the user is not premium
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('You need to be a premium user to access this feature.'),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'You need to be a premium user to access this feature.'),
+                          ),
+                        );
                       }
                     },
                     child: Container(
@@ -99,7 +106,8 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
                             right: 10,
                             bottom: 70,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                              borderRadius: BorderRadius.circular(
+                                  20), // Adjust the radius according to your preference
                               child: Image.asset('assets/images/shop.jpg'),
                             ),
                           ),
@@ -131,7 +139,9 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
                 ),
               ],
             ),
-            SizedBox(height: 50,),
+            SizedBox(
+              height: 50,
+            ),
             SizedBox(
               height: size.height * .3,
               child: GestureDetector(
@@ -147,7 +157,8 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
                   } else {
                     // Show a message or handle the case when the user is not premium
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('You need to be a premium user to access this feature.'),
+                      content: Text(
+                          'You need to be a premium user to access this feature.'),
                     ));
                   }
                 },
@@ -161,7 +172,8 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
                         right: 10,
                         bottom: 55,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Adjust the radius according to your preference
+                          borderRadius: BorderRadius.circular(
+                              20), // Adjust the radius according to your preference
                           child: Image.asset('assets/images/won_bid.jpg'),
                         ),
                       ),
@@ -191,11 +203,12 @@ class _MarketPlacePageState extends State<BuyerMarketPlacePage> {
                 ),
               ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
           ],
         ),
       ),
     );
-
   }
 }

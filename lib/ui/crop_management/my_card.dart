@@ -9,6 +9,7 @@ import 'edit_crop_page.dart';
 class MyCard extends StatefulWidget {
   final int index;
   final String type;
+  final String userName;
   final String name;
   final String imageUrl;
   final Function onTap;
@@ -18,6 +19,7 @@ class MyCard extends StatefulWidget {
   const MyCard(
       {super.key,
         required this.name,
+        required this.userName,
         required this.imageUrl,
         required this.onTap,
         required this.index,
@@ -162,7 +164,24 @@ class _MyCardState extends State<MyCard> {
                             IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {
-                                ctrl.deleteProduct(ctrl.crops[widget.index].id ?? '');
+                                ctrl.deleteProduct(ctrl.cropsShowInUi[widget.index].id ?? '', widget.userName);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Crop Deleted !'),
+                                      content: Text('Successfully Crop Deleted'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                             ),
                           ],

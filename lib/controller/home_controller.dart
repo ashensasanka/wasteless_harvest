@@ -16,6 +16,7 @@ import '../model/add_listing/add_listing.dart';
 import '../model/message/message.dart';
 import '../model/post_details/postdetails.dart';
 import '../model/user1_comment/user1_comment.dart';
+import '../model/users/users.dart';
 
 class HomeController extends GetxController{
   String test = 'test string';
@@ -25,6 +26,7 @@ class HomeController extends GetxController{
   FirebaseStorage storage = FirebaseStorage.instance;
   User? user = FirebaseAuth.instance.currentUser;
   //Defined the Collections variables of database
+  late CollectionReference usersCollection;
   late CollectionReference cropCollection;
   late CollectionReference addlistingCollection;
   late CollectionReference postdetailsCollection;
@@ -59,8 +61,8 @@ class HomeController extends GetxController{
   String? lat,long;
   String croptype = 'Type';
   String listingtype = 'Type';
-  String cropcatg = 'Category';
-  String listingcatg = 'Category';
+  String cropcatg = 'Crop Name';
+  String listingcatg = 'Crop Name';
   List<String> cropcatgItems = [];
   List<String> listingcatgItems = [];
   String brand = 'Fish Category';
@@ -82,7 +84,9 @@ class HomeController extends GetxController{
   List<PostDetails> postdetails = []; //fetchPostsList
   List<PostDetails> postShowUi = []; //fetchPostsList
   //List of Message send and Show
+  List<Users> usersShow = [];
 
+  List<Message> message = [];
   List<Message> messageUi = []; //fetchMessage
   List<User1Comment> user1commentUi = []; //fetchuser1Comment
 
@@ -96,17 +100,18 @@ class HomeController extends GetxController{
   @override
   void onInit() async {
     // TODO: implement onInit
+    usersCollection = firestore.collection('farmer_users');
     addlistingCollection =firestore.collection('add_listing'); //addListing, fetchfarmerListingDetails
     postdetailsCollection = firestore.collection('postdetails'); //addPost, fetchPostsList
     messageCollection = firestore.collection('message'); //addMessage, fetchMessage
     listingCollection = firestore.collection('farmer'); //fetchListingDetails
     commentCollection = firestore.collection('rate_comment'); //fetchRatesComment
     user1commentCollection = firestore.collection('user_1'); //add1CommentRate, fetchuser1Comment
-    await fetchMycrops();
+    // await fetchMycrops();
     await fetchPostsList();
-    await fetchMessage();
-    await fetchfarmerListingDetails('');
-    await fetchListingDetails('');
+    await fetchfarmerListings('');
+    await fetchMycrops('');
+    await fetchUserDetails();
     await fetchRatesComment();
     await fetchuser1Comment();
     super.onInit();
@@ -158,10 +163,11 @@ class HomeController extends GetxController{
     }
   }
   // Add messages into message collection
-  addMessage(){
+  addMessage( String uid){
+    CollectionReference messageColl = FirebaseFirestore.instance.collection(uid);
     try {
       int pressingTime = DateTime.now().toUtc().millisecondsSinceEpoch;
-      DocumentReference doc = messageCollection.doc('$pressingTime'); //message
+      DocumentReference doc = messageColl.doc('$pressingTime');
       Message message = Message(
         id:doc.id,
         message:messageController.text,
@@ -199,7 +205,8 @@ class HomeController extends GetxController{
   }
   //create_new_listing, FarmerAddListing
   addListing(String userName,File? selectedImage, String filetype) async {
-    CollectionReference collection = FirebaseFirestore.instance.collection('add_listing${userName}');
+    CollectionReference owncollection = FirebaseFirestore.instance.collection('add_listing${userName}');
+    CollectionReference allcollection = FirebaseFirestore.instance.collection('all_listings');
     DateTime currentDate = DateTime.now();
     String trimmedDate = DateTime(currentDate.year, currentDate.month, currentDate.day).toString();
     String result = trimmedDate.split(' ')[0];//create_new_listing, FarmerAddListing
@@ -213,9 +220,12 @@ class HomeController extends GetxController{
       final metadata = SettableMetadata(contentType: filetype);
       await storageReference.putFile(selectedImage, metadata);
       final String imageUrl = await storageReference.getDownloadURL();
-      DocumentReference doc = collection.doc(); //add_listing
+      DocumentReference owndoc = owncollection.doc();
+      DocumentReference alldoc = allcollection.doc();
       AddListing addlisting = AddListing(
-          id:doc.id,
+          collName:'add_listing${userName}',
+          allid:alldoc.id,
+          ownid:owndoc.id,
           name:listingcatg,
           type: listingtype,
           image: imageUrl,
@@ -226,7 +236,8 @@ class HomeController extends GetxController{
           hbid:double.tryParse(addlistStartPriceCtrl.text),
       );
       final productJson = addlisting.toJson();
-      doc.set(productJson);
+      owndoc.set(productJson);
+      alldoc.set(productJson);
       Get.snackbar('Success', 'Product added successfully', colorText: Colors.green);
       setValuesDefault();
     } catch (e) {
@@ -285,6 +296,19 @@ class HomeController extends GetxController{
     update();
   }
 
+  fetchUserDetails() async {
+    try {
+      QuerySnapshot usertailsSnapshot = await usersCollection.get();
+      final List<Users> retrievedUsers = usertailsSnapshot.docs.map((doc) => Users.fromJson(doc.data() as Map<String, dynamic>)).toList();
+      usersShow.assignAll(retrievedUsers);
+      Get.snackbar('Success', 'Users fetch successfully', colorText: Colors.green);
+    } catch (e) {
+      Get.snackbar('Error', e.toString(), colorText: Colors.red);
+    } finally{
+      update();
+    }
+  }
+
   fetchuser1Comment() async {
     try {
       QuerySnapshot cartdetailsSnapshot = await user1commentCollection.get(); //user_1
@@ -299,7 +323,7 @@ class HomeController extends GetxController{
     }
   }
 
-  fetchfarmerListingDetails(String username) async {
+  fetchfarmerListings(String username) async {
     CollectionReference collection = FirebaseFirestore.instance.collection('add_listing${username}');
     try {
       QuerySnapshot cartdetailsSnapshot = await collection.get(); //add_listing
@@ -313,15 +337,28 @@ class HomeController extends GetxController{
       update();
     }
   }
+  fetchallListings() async {
+    CollectionReference collection = FirebaseFirestore.instance.collection('all_listings');
+    try {
+      QuerySnapshot cartdetailsSnapshot = await collection.get(); //add_listing
+      final List<AddListing> retrievedLog = cartdetailsSnapshot.docs.map((doc) => AddListing.fromJson(doc.data() as Map<String, dynamic>)).toList();
+      farmerlistingsShowInUi.clear();
+      farmerlistingsShowInUi.assignAll(retrievedLog);
+      Get.snackbar('Success', 'FarmerListing fetch successfully', colorText: Colors.green);
+    } catch (e) {
+      Get.snackbar('Error', e.toString(), colorText: Colors.red);
+    } finally{
+      update();
+    }
+  }
   // Fetch the cart details from cart details collection
-  fetchListingDetails(String username) async {
+  fetchMycrops(String username) async {
     CollectionReference collection = FirebaseFirestore.instance.collection('addcrop${username}');
     try {
       QuerySnapshot cartdetailsSnapshot = await collection.get(); //farmer
       final List<Crops> retrievedLog = cartdetailsSnapshot.docs.map((doc) => Crops.fromJson(doc.data() as Map<String, dynamic>)).toList();
-      listings.clear();
-      listings.assignAll(retrievedLog);
-      listingsShowInUi.assignAll(listings); //BidsWon(),  ShopPage()
+      cropsShowInUi.clear();
+      cropsShowInUi.assignAll(retrievedLog);
       Get.snackbar('Success', 'MyCropDetails fetch successfully', colorText: Colors.green);
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
@@ -344,15 +381,15 @@ class HomeController extends GetxController{
     }
   }
   // Fetch the messages from message collection
-  fetchMessage() async {
+  fetchMessage(String uid) async {
+    CollectionReference messageColl = FirebaseFirestore.instance.collection(uid);
     try {
-      QuerySnapshot messageSnapshot = await messageCollection.get(); //message
-      final List<Message> retrievedMessage = messageSnapshot.docs
-          .map((doc) => Message.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-      messageUi.clear();
-      messageUi.assignAll(retrievedMessage);
-      Get.snackbar('Success', 'Message fetch successfully', colorText: Colors.green);
+      QuerySnapshot messageSnapshot = await messageColl.get();
+      final List<Message> retrievedMessage = messageSnapshot.docs.map((doc) => Message.fromJson(doc.data() as Map<String, dynamic>)).toList();
+      message.clear();
+      message.assignAll(retrievedMessage);
+      messageUi.assignAll(message);
+      // Get.snackbar('Success', 'Message fetch successfully', colorText: Colors.green);
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     } finally{
@@ -360,20 +397,20 @@ class HomeController extends GetxController{
     }
   }
   // Fetch the products details from the product details collection
-  fetchMycrops() async {
-    try {
-      QuerySnapshot productSnapshot = await cropCollection.get(); //farmer
-      final List<Crops> retrievedProducts = productSnapshot.docs.map((doc) => Crops.fromJson(doc.data() as Map<String, dynamic>)).toList();
-      crops.clear();
-      crops.assignAll(retrievedProducts);
-      cropsShowInUi.assignAll(crops);
-      Get.snackbar('Success', 'Product fetch successfully', colorText: Colors.green);
-    } catch (e) {
-      Get.snackbar('Error', e.toString(), colorText: Colors.red);
-    } finally{
-      update();
-    }
-  }
+  // fetchMycrops() async {
+  //   try {
+  //     QuerySnapshot productSnapshot = await cropCollection.get(); //farmer
+  //     final List<Crops> retrievedProducts = productSnapshot.docs.map((doc) => Crops.fromJson(doc.data() as Map<String, dynamic>)).toList();
+  //     crops.clear();
+  //     crops.assignAll(retrievedProducts);
+  //     cropsShowInUi.assignAll(crops);
+  //     Get.snackbar('Success', 'Product fetch successfully', colorText: Colors.green);
+  //   } catch (e) {
+  //     Get.snackbar('Error', e.toString(), colorText: Colors.red);
+  //   } finally{
+  //     update();
+  //   }
+  // }
   // Fetch the post details from the post details collection
   fetchPostsList() async{
     try {
@@ -390,10 +427,11 @@ class HomeController extends GetxController{
     }
   }
   // Delete the products from database
-  deleteProduct(String id) async {
+  deleteProduct(String id, String username) async {
+    CollectionReference collection = FirebaseFirestore.instance.collection('addcrop${username}');
     try {
-      await cropCollection.doc(id).delete();
-      fetchMycrops();
+      await collection.doc(id).delete();
+      fetchMycrops(username);
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }

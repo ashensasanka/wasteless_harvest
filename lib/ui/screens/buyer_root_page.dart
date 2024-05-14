@@ -24,14 +24,17 @@ class BuyerRootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<BuyerRootPage> {
-
   int _bottomNavIndex = 0;
 
   //List of the pages
-  List<Widget> _widgetOptions(){
+  List<Widget> _widgetOptions() {
     return [
-      BuyerHomePage(username: widget.username,),
-      BuyerProfilePage(username: widget.username,),
+      BuyerHomePage(
+        username: widget.username,
+      ),
+      BuyerProfilePage(
+        username: widget.username,
+      ),
     ];
   }
 
@@ -58,12 +61,12 @@ class _RootPageState extends State<BuyerRootPage> {
             onPressed: () {
               ap.userSignOut().then(
                     (value) => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EnrollerPage(),
-                  ),
-                ),
-              );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EnrollerPage(),
+                      ),
+                    ),
+                  );
             },
             icon: const Icon(Icons.exit_to_app),
           ),
@@ -73,16 +76,23 @@ class _RootPageState extends State<BuyerRootPage> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(100, 0, 0, 0),
-              child: Text(titleList[_bottomNavIndex], style: TextStyle(
-                color: Constants.blackColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 24,
-              ),),
+              child: Text(
+                titleList[_bottomNavIndex],
+                style: TextStyle(
+                  color: Constants.blackColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24,
+                ),
+              ),
             ),
-            Icon(Icons.notifications, color: Constants.blackColor, size: 30.0,)
+            Icon(
+              Icons.notifications,
+              color: Constants.blackColor,
+              size: 30.0,
+            )
           ],
         ),
-        backgroundColor:Color(0xffe1f6cb),
+        backgroundColor: Color(0xffe1f6cb),
         elevation: 0.0,
       ),
       body: IndexedStack(
@@ -91,19 +101,20 @@ class _RootPageState extends State<BuyerRootPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        splashColor: Constants.primaryColor,
-        activeColor: Constants.primaryColor,
-        inactiveColor: Colors.black.withOpacity(.7),
-        icons: iconList,
-        activeIndex: _bottomNavIndex,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.softEdge,
-        onTap: (index){
-          setState(() {
-            _bottomNavIndex = index;
-          });
-        }
-      ),
+          splashColor: Constants.primaryColor,
+          activeColor: Constants.primaryColor,
+          inactiveColor: Colors.black.withOpacity(.7),
+          icons: iconList,
+          activeIndex: _bottomNavIndex,
+          gapLocation: GapLocation.center,
+          notchSmoothness: NotchSmoothness.softEdge,
+          onTap: (index) {
+            setState(
+              () {
+                _bottomNavIndex = index;
+              },
+            );
+          }),
     );
   }
 }

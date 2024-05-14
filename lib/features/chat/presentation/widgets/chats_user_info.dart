@@ -23,8 +23,7 @@ class ChatUserInfo extends StatelessWidget {
             CircleAvatar(
               radius: 20,
               backgroundImage: NetworkImage(
-                'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg'
-                  // ctrl.makePostUi[1].image as String
+                'https://t3.ftcdn.net/jpg/03/02/88/46/360_F_302884605_actpipOdPOQHDTnFtp4zg4RtlWzhOASp.jpg'
               ),
             ),
             const SizedBox(width: 10),
@@ -32,7 +31,7 @@ class ChatUserInfo extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Ashen Sasanka',
+                  userId,
                   // ctrl.makePostUi[1].fullName as String,
                   style: const TextStyle(
                     fontSize: 18,

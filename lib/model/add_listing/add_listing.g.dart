@@ -7,7 +7,9 @@ part of 'add_listing.dart';
 // **************************************************************************
 
 AddListing _$AddListingFromJson(Map<String, dynamic> json) => AddListing(
-      id: json['id'] as String?,
+      collName: json['collName'] as String?,
+      ownid: json['ownid'] as String?,
+      allid: json['allid'] as String?,
       name: json['name'] as String?,
       type: json['type'] as String?,
       image: json['image'] as String?,
@@ -20,7 +22,9 @@ AddListing _$AddListingFromJson(Map<String, dynamic> json) => AddListing(
 
 Map<String, dynamic> _$AddListingToJson(AddListing instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'collName': instance.collName,
+      'ownid': instance.ownid,
+      'allid': instance.allid,
       'name': instance.name,
       'type': instance.type,
       'image': instance.image,

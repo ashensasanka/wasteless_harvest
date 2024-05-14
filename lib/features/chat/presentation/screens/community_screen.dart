@@ -23,7 +23,8 @@ class CommunityScreen extends ConsumerStatefulWidget {
   static const routeName = '/chat-screen';
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CommunityScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CommunityScreenState();
 }
 
 class _CommunityScreenState extends ConsumerState<CommunityScreen> {
@@ -46,34 +47,32 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.realWhiteColor,
-        appBar: AppBar(
-                leading: IconButton(
-                  onPressed: Navigator.of(context).pop,
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.messengerBlue,
-                  ),
-                ),
-                titleSpacing: 0,
-                title: Text('Community'),
-              ),
-        body: Column(
-                children: [
-                  const Expanded(
-                    child: MessagesList(
-                    ),
-                  ),
-                  const Divider(),
-                  _buildMessageInput(),
-                ],
-              ),
-
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: AppColors.messengerBlue,
+          ),
+        ),
+        titleSpacing: 0,
+        title: Text('Community'),
+      ),
+      body: Column(
+        children: [
+          const Expanded(
+            child: MessagesList(),
+          ),
+          const Divider(),
+          _buildMessageInput(),
+        ],
+      ),
     );
   }
 
   // Chat Text Field
   Widget _buildMessageInput() {
-    return GetBuilder<HomeController>(builder: (ctrl){
+    return GetBuilder<HomeController>(builder: (ctrl) {
       return Container(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -140,8 +139,8 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                 color: AppColors.messengerBlue,
               ),
               onPressed: () {
-                ctrl.addMessage();
-                ctrl.fetchMessage();
+                ctrl.addMessage('');
+                ctrl.fetchMessage('');
                 ctrl.messageController.clear();
               },
             ),

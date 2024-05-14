@@ -17,7 +17,6 @@ class AddCropsPage extends StatefulWidget {
 }
 
 class _AddCropsPageState extends State<AddCropsPage> {
-
   List<String> getCategoriesForCropType(String cropType) {
     switch (cropType) {
       case 'Paddy':
@@ -34,6 +33,7 @@ class _AddCropsPageState extends State<AddCropsPage> {
         return [];
     }
   }
+
   DateTime? _selectedDate;
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -44,120 +44,157 @@ class _AddCropsPageState extends State<AddCropsPage> {
     );
 
     if (pickedDate != null && pickedDate != _selectedDate) {
-      setState(() {
-        _selectedDate = pickedDate;
-      });
+      setState(
+        () {
+          _selectedDate = pickedDate;
+        },
+      );
     }
   }
+
   @override
-  Widget build(BuildContext context) =>
-    GetBuilder<HomeController>(builder:(ctrl) {
-      return Scaffold(
-        backgroundColor:Color(0xffe1f6cb),
-        appBar: AppBar(
-          backgroundColor:Color(0xffe1f6cb),
-          title: Text('Add Crops'),
-          // Add leading back button to navigate to HomePage
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-        body: SingleChildScrollView(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/home_back.jpg'), // Replace 'assets/background_image.jpg' with your image path
-                  fit: BoxFit.cover,
-                ),
-              ),
-              margin: const EdgeInsets.all(10),
-              width: double.maxFinite,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height: 15),
-                  Container(
-                    width: 200, // Set width as per your requirement
-                    color: Colors.green, // Set the desired background color here
-                    child: DropDownBtn(
-                      items: const ['Paddy', 'Vegetables', 'Fruits', 'Yams', 'Pulses and ceriels'],
-                      selectedItemText: ctrl.croptype,
-                      onSelected: (selectedValue) {
-                        setState(() {
-                          ctrl.croptype = selectedValue ?? 'Type';
-                          ctrl.cropcatgItems  = getCategoriesForCropType(selectedValue ?? '');
-                        });
-                        ctrl.update();
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Container(
-                    width: 200, // Set width as per your requirement
-                    color: Colors.green, // Set the desired background color here
-                    child: DropDownBtn(
-                      items: ctrl.cropcatgItems,
-                      selectedItemText: ctrl.cropcatg,
-                      onSelected: (selectedValue) {
-                        ctrl.cropcatg = selectedValue ?? 'Category';
-                        ctrl.update();
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  const SizedBox(height: 15),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      ctrl.getImageUrlForCropCategory(ctrl.cropcatg),
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  const SizedBox(height: 15),
-                  const SizedBox(height: 15),
-                  // TextField(
-                  //   controller: ctrl.cropPlantCtrl,
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(10),
-                  //     ),
-                  //     labelText: 'Plant Date',
-                  //     hintText: 'Enter Plant Date (DD/MM/YYYY)',
-                  //   ),
-                  //   keyboardType: TextInputType.datetime,
-                  // ),
-                  _selectedDate != null
-                      ? Text(
-                      'Selected Date: ${DateFormat('dd/MM/yyyy').format(_selectedDate!)}')
-                      : Text('No date selected'),
-                  ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: Text('Select Date'),
-                  ),
-                  const SizedBox(height: 15),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      minimumSize: Size(170, 40), // Set width and height as per your requirement
-                    ),
-                    onPressed: () {
-                      DateTime? harvestDate = _selectedDate?.add(Duration(days: 66));
-                      ctrl.addCrop(widget.username,'${DateFormat('dd/MM/yyyy').format(_selectedDate!)}','${DateFormat('dd/MM/yyyy').format(harvestDate!)}'); //
-                    },
-                    child: const Text('Add Crop'),
-                  ),
-                  SizedBox(height: 180,)
-                ],
+  Widget build(BuildContext context) => GetBuilder<HomeController>(
+        builder: (ctrl) {
+          return Scaffold(
+            backgroundColor: Color(0xffe1f6cb),
+            appBar: AppBar(
+              backgroundColor: Color(0xffe1f6cb),
+              title: Text('Add Crops'),
+              // Add leading back button to navigate to HomePage
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
               ),
             ),
-          ),
+            body: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/home_back.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                margin: const EdgeInsets.all(10),
+                width: double.maxFinite,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const SizedBox(height: 15),
+                    Container(
+                      width: 200, // Set width as per your requirement
+                      color:
+                          Colors.green, // Set the desired background color here
+                      child: DropDownBtn(
+                        items: const [
+                          'Paddy',
+                          'Vegetables',
+                          'Fruits',
+                          'Yams',
+                          'Pulses and ceriels'
+                        ],
+                        selectedItemText: ctrl.croptype,
+                        onSelected: (selectedValue) {
+                          setState(() {
+                            ctrl.croptype = selectedValue ?? 'Type';
+                            ctrl.cropcatgItems =
+                                getCategoriesForCropType(selectedValue ?? '');
+                          });
+                          ctrl.update();
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    Container(
+                      width: 200, // Set width as per your requirement
+                      color:
+                          Colors.green, // Set the desired background color here
+                      child: DropDownBtn(
+                        items: ctrl.cropcatgItems,
+                        selectedItemText: ctrl.cropcatg,
+                        onSelected: (selectedValue) {
+                          ctrl.cropcatg = selectedValue ?? 'Crop Name';
+                          ctrl.update();
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    const SizedBox(height: 15),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        ctrl.getImageUrlForCropCategory(ctrl.cropcatg),
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    const SizedBox(height: 15),
+                    const SizedBox(height: 15),
+                    // TextField(
+                    //   controller: ctrl.cropPlantCtrl,
+                    //   decoration: InputDecoration(
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //     labelText: 'Plant Date',
+                    //     hintText: 'Enter Plant Date (DD/MM/YYYY)',
+                    //   ),
+                    //   keyboardType: TextInputType.datetime,
+                    // ),
+                    _selectedDate != null
+                        ? Text(
+                            'Selected Date: ${DateFormat('dd/MM/yyyy').format(_selectedDate!)}')
+                        : Text('No date selected'),
+                    ElevatedButton(
+                      onPressed: () => _selectDate(context),
+                      child: Text('Select Start Date'),
+                    ),
+                    const SizedBox(height: 15),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(170,
+                            40), // Set width and height as per your requirement
+                      ),
+                      onPressed: () {
+                        DateTime? harvestDate =
+                            _selectedDate?.add(Duration(days: 66));
+                        ctrl.addCrop(
+                            widget.username,
+                            '${DateFormat('dd/MM/yyyy').format(_selectedDate!)}',
+                            '${DateFormat('dd/MM/yyyy').format(harvestDate!)}');
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Crop Added !'),
+                              content: Text('Successfully Added'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Add Crop'),
+                    ),
+                    SizedBox(
+                      height: 180,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       );
-    });
 }

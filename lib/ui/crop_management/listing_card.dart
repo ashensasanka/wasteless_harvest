@@ -158,7 +158,7 @@ class _ListCardState extends State<ListCard> {
                           ),
                           const SizedBox(height: 12,),
                           Text(
-                            'Highest bidder name:',
+                            'Highest bidder name: ${widget.hbidname}',
                             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
                           ),
