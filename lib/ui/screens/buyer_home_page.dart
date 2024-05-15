@@ -92,7 +92,9 @@ class _HomePageState extends State<BuyerHomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BuyerMarketPlacePage(username: widget.username,),
+                              builder: (context) => BuyerMarketPlacePage(
+                                username: widget.username,
+                              ),
                             ),
                           );
                         } else {
@@ -167,8 +169,7 @@ class _HomePageState extends State<BuyerHomePage> {
                       },
                       child: Container(
                         width: 160,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 10),
+                        margin: EdgeInsets.symmetric(horizontal: 10),
                         child: Stack(
                           children: [
                             Positioned(
@@ -231,11 +232,12 @@ class _HomePageState extends State<BuyerHomePage> {
                             ),
                           );
                         } else {
-                          // Show a message or handle the case when the user is not premium
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'You need to be a premium user to access this feature.'),
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'You need to be a premium user to access this feature.'),
+                            ),
+                          );
                         }
                       },
                       child: Container(
@@ -249,7 +251,7 @@ class _HomePageState extends State<BuyerHomePage> {
                               bottom: 47,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(
-                                    20), // Adjust the radius according to your preference
+                                    20),
                                 child: Image.asset(
                                     'assets/images/rateandcomment.jpg'),
                               ),
